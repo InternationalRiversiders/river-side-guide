@@ -113,26 +113,69 @@
 
     // =================================================================
     // 2. 核心逻辑 (CORE LOGIC)
-    // 负责初始化 Driver.js 并处理兼容性问题
     // =================================================================
 
-    // 暴露全局函数 window.startTour() 供外部调用
     window.startTour = function() {
     console.log("[Tour] Starting manual tour...");
 
     const driver = window.driver.js.driver;
 
-    // 容错处理：确保关键元素存在，避免报错
-    if (!document.querySelector('#create-topic')) {
-    console.warn("[Tour] Warning: '#create-topic' not found. Tour may display incorrectly.");
+    // 1. 智能路由检测：判断当前是否适合运行教程
+    // 只要找不到核心元素（例如大搜索框或分类），就认为不在主页
+    const isHomePage = document.querySelector('#welcome-banner-search-input') || document.querySelector('.category-drop');
+
+    if (!isHomePage) {
+    // --- 🆕 风格统一的“确认弹窗” ---
+    // 我们创建一个临时的 Driver 实例，专门用来做跳转询问
+    const redirectDriver = driver({
+    showProgress: false,    // 不显示 "1/2" 进度
+    allowClose: true,       // 允许点击 X 关闭
+    overlayClick: true,     // 允许点击背景关闭（相当于取消）
+    animate: false,
+
+    // 巧妙的按钮文案配置
+    nextBtnText: '跳转回主页',  // 把“下一步”伪装成“确认按钮”
+    prevBtnText: '取消',       // 第一步通常不显示上一步，这里只是占位
+    doneBtnText: '取消',       // 兜底
+
+    steps: [
+    // [步骤 1]：询问卡片
+{
+    // 不指定 element，让它居中显示
+    popover: {
+    title: '⚠️ 位置提示',
+    description: '新手引导主要针对【论坛主页】的功能介绍。<br><br>当前页面无法演示所有步骤，是否跳转回主页？'
+}
+},
+    // [步骤 2]：执行逻辑 (陷阱步骤)
+    // 用户只有点击了“跳转回主页”，才会进入这个步骤，进而触发跳转代码
+{
+    element: 'body', // 随便绑个元素，防止报错
+    popover: { title: '正在跳转...', description: '请稍候...' },
+
+    // 关键：一旦进入这一步，立即执行跳转
+    onHighlightStarted: () => {
+    window.location.href = "/";
+}
+}
+    ]
+});
+
+    redirectDriver.drive();
+    return; // 停止执行后面的主教程
 }
 
-    // 初始化 Driver 实例
+    // 2. 正常启动主教程 (如果在主页)
+    // 检查关键元素是否存在 (防止报错)
+    if (!document.querySelector('#create-topic')) {
+    console.warn("[Tour] Warning: '#create-topic' not found.");
+}
+
     const driverObj = driver({
-    showProgress: true,     // 显示步骤进度 (1/13)
-    allowClose: true,       // 允许用户中途退出
-    overlayClick: false,    // 禁止点击遮罩层关闭 (防止误触)
-    animate: false,         // 关闭动画以解决固定定位元素的偏移问题
+    showProgress: true,
+    allowClose: true,
+    overlayClick: false,
+    animate: false,
     nextBtnText: '下一步',
     prevBtnText: '上一步',
     doneBtnText: '完成',
