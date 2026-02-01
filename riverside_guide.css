@@ -95,6 +95,12 @@
         color: #111111 !important;
         box-shadow: 0 12px 30px rgba(0,0,0,0.15) !important;
     }
+    .tour-popover .driver-popover-arrow,
+    .tour-popover .driver-popover-arrow::before,
+    .tour-popover .driver-popover-arrow::after {
+        background: #ffffff !important;
+        border-color: #ffffff !important;
+    }
     .tour-popover .driver-popover-title { color: #111111 !important; }
     .tour-popover .driver-popover-description { color: #333333 !important; }
 }
