@@ -4,7 +4,7 @@ export default apiInitializer((api) => {
   // =================================================================
   // 1. 教程配置 (TOUR CONFIGURATION)
   // =================================================================
-  const TOUR_CONFIG = {
+  const HOME_TOUR_CONFIG = {
     steps: [
       // --- 引导步骤 不配置device为通用device: 0) ---
       // 不配置 device：通用
@@ -279,6 +279,41 @@ export default apiInitializer((api) => {
     ],
   };
 
+  const TOPIC_TOUR_CONFIG = {
+    steps: [
+      {
+        popover: {
+          title: "欢迎来到帖子页",
+          description: "本引导将帮助你了解帖子页的核心功能。",
+        },
+      },
+      {
+        element: "#topic-title",
+        popover: {
+          title: "帖子标题",
+          description: "这里显示当前帖子的标题与相关信息。",
+        },
+      },
+      {
+        device: 0,
+        element: ".timeline-scrollarea-wrapper",
+        popover: {
+          title: "时间轴导航",
+          description:
+              "<p>这是 Discourse 特有的时间轴。</p>" +
+              "<p>拖动滑块可以快速跳转楼层，或者<span style='font-size: large'>点击顶部/底部的日期直接跳转到第一楼或最新一楼</span></p>",
+        },
+      },
+      {
+        element: "#topic-footer-buttons",
+        popover: {
+          title: "回复与操作",
+          description: "在这里进行回复、分享或其他帖子相关操作。",
+        },
+      },
+    ],
+  };
+
   // --- 手动启动函数 ---
   function startTour() {
     if (!window.driver || !window.driver.js || !window.driver.js.driver) {
@@ -290,37 +325,32 @@ export default apiInitializer((api) => {
 
     const driver = window.driver.js.driver;
 
-    // 1. 获取当前域名并拼接目标 URL
-    const baseUrl = window.location.origin;
-
     const { pathname } = window.location;
     const isHomePage = pathname === "/";
     const isTopicPage = /^\/t\/[^/]+\/\d+/.test(pathname);
 
-    if (isTopicPage) {
-      alert("帖子页面引导即将上线");
+    if (!isHomePage && !isTopicPage) {
+      console.warn("[Tour] 当前页面不是首页或帖子页，已跳过引导。");
       return;
     }
 
-    if (!isHomePage) {
-      console.warn("[Tour] 当前页面不是首页，已跳过首页引导。");
-      return;
-    }
+    const activeConfig = isTopicPage ? TOPIC_TOUR_CONFIG : HOME_TOUR_CONFIG;
+    const pageLabel = isTopicPage ? "Topic" : "Home";
 
-    if (!document.querySelector("#create-topic")) {
+    if (isHomePage && !document.querySelector("#create-topic")) {
       console.warn("[Tour] Warning: '#create-topic' not found.");
     }
 
     // 3. 设备检测与配置加载
     const isMobile = window.innerWidth <= 600;
-    const currentSteps = TOUR_CONFIG.steps.filter((step) => {
+    const currentSteps = activeConfig.steps.filter((step) => {
       if (step.device === 0) return !isMobile;
       if (step.device === 1) return isMobile;
       return true;
     });
 
     console.log(
-      `[Tour] Mode: ${isMobile ? "Mobile" : "Desktop"}, Steps: ${currentSteps.length}`
+      `[Tour] Page: ${pageLabel}, Mode: ${isMobile ? "Mobile" : "Desktop"}, Steps: ${currentSteps.length}`
     );
 
     // 5. 启动引导
