@@ -5,8 +5,11 @@ export default apiInitializer((api) => {
   // 1. 教程配置 (TOUR CONFIGURATION)
   // =================================================================
   const TOUR_CONFIG = {
-    // --- 电脑端引导步骤 ---
-    stepsDesktop: [
+    steps: [
+      // --- 引导步骤 不配置device为通用device: 0) ---
+      // 不配置 device：通用
+      // device = 0：仅电脑端
+      // device = 1：仅手机端
       {
         popover: {
           title: "欢迎来到 riverside",
@@ -14,10 +17,31 @@ export default apiInitializer((api) => {
         },
       },
       {
+        device: 0,
         element: "#create-topic",
         popover: {
           title: "发帖",
           description: "点击这里发布新话题。",
+        },
+      },
+      {
+        device: 1,
+        element: "#toggle-hamburger-menu",
+        popover: {
+          title: "导航侧栏",
+          description: "点击这里展开社区导航栏。",
+        },
+        onHighlighted: (element) => {
+          const target = element || document.querySelector("#toggle-hamburger-menu");
+          if (target) {
+            target.dispatchEvent(
+              new MouseEvent("click", {
+                bubbles: true,
+                cancelable: true,
+                view: window,
+              })
+            );
+          }
         },
       },
       {
@@ -32,7 +56,7 @@ export default apiInitializer((api) => {
         popover: {
           title: "版块列表",
           description:
-              "这里列出了论坛的所有版块。点击展开或折叠，快速跳转到你感兴趣的分区。<br><br><span style='color:#E45735; font-weight:bold;'>你可以点击右上角的按钮来自定义显示的版块。</span>",
+            "这里列出了论坛的所有版块。点击展开或折叠，快速跳转到你感兴趣的分区。<br><br><span style='color:#E45735; font-weight:bold;'>你可以点击右上角的按钮来自定义显示的版块。</span>",
         },
       },
       {
@@ -40,37 +64,73 @@ export default apiInitializer((api) => {
         popover: {
           title: "公共聊天室",
           description:
-              "<div style='margin-bottom:6px;'><b>校友广场</b>：可以与论坛中的同学与校友实时互动。</div>" +
-              "<div><b>二手交流</b>：二手交流信息、优惠券红包码，均在这里分享。</div>",
+            "<div style='margin-bottom:6px;'><b>校友广场</b>：可以与论坛中的同学与校友实时互动。</div>" +
+            "<div><b>二手交流</b>：二手交流信息、优惠券红包码，均在这里分享。</div>",
         },
       },
       {
+        device: 1,
+        element: "#search-button",
+        popover: {
+          title: "搜索",
+          description: "点击进入搜索界面，可搜索全站内容",
+        },
+        onHighlighted: () => {
+          const toggle = document.querySelector("#toggle-hamburger-menu");
+          if (toggle) {
+            toggle.dispatchEvent(
+              new MouseEvent("click", {
+                bubbles: true,
+                cancelable: true,
+                view: window,
+              })
+            );
+          }
+        },
+      },
+      {
+        device: 0,
         element: "#welcome-banner-search-input",
         popover: {
           title: "快速搜索",
           description: "直接在这里输入关键词，即可检索全站内容。",
         },
+        onHighlighted: () => {
+          const toggle = document.querySelector("#toggle-hamburger-menu");
+          if (toggle) {
+            toggle.dispatchEvent(
+              new MouseEvent("click", {
+                bubbles: true,
+                cancelable: true,
+                view: window,
+              })
+            );
+          }
+        },
       },
       {
+        device: 0,
         element: ".show-advanced-search",
         popover: {
           title: "高级搜索",
           description:
-              "点击此图标进入<b>高级搜索</b>，可以根据 <b style='color:#0088CC'>分类</b>、<b style='color:#0088CC'>话题</b>、<b style='color:#0088CC'>标签</b>、<b style='color:#0088CC'>发帖人</b> 等条件进行精确搜索。",
+            "点击此图标进入<b>高级搜索</b>，可以根据 <b style='color:#0088CC'>分类</b>、<b style='color:#0088CC'>话题</b>、<b style='color:#0088CC'>标签</b>、<b style='color:#0088CC'>发帖人</b> 等条件进行精确搜索。",
         },
       },
       {
+        device: 0,
         element: "#navigation-bar",
         popover: {
           title: "话题列表排序",
           description:
-              "<div style='margin-bottom:8px;'><b style='color:#25AAE2; font-size:15px;'>最新发表</b><br>按发布时间排序，展示全站<b>最新创建的主题</b>。适合希望第一时间获取新鲜资讯的用户。</div>" +
-              "<div style='margin-bottom:8px;'><b style='color:#25AAE2; font-size:15px;'>最新回复</b><br>按最后回复时间排序，显示<b>最近被活跃讨论的主题</b>。</div>" +
-              "<div style='margin-bottom:8px;'><b style='color:#25AAE2; font-size:15px;'>未读 / 未读话题</b><br>• <b>未读话题</b>：您尚未浏览过的主题。<br>• <b>未读</b>：您已看过但<b>有新回复</b>的主题。</div>" +
-              "<div><b style='color:#25AAE2; font-size:15px;'>热门 / 排行榜</b><br>基于浏览量、回复数筛选的高热度内容。</div>",
+            "<div style='margin-bottom:8px;'><b style='color:#25AAE2; font-size:15px;'>最新发表</b><br>按发布时间排序，展示全站<b>最新创建的主题</b>。适合希望第一时间获取新鲜资讯的用户。</div>" +
+            "<div style='margin-bottom:8px;'><b style='color:#25AAE2; font-size:15px;'>最新回复</b><br>按最后回复时间排序，显示<b>最近被活跃讨论的主题</b>。</div>" +
+            "<div style='margin-bottom:8px;'><b style='color:#25AAE2; font-size:15px;'>未读 / 未读话题</b><br>• <b>未读话题</b>：您尚未浏览过的主题。<br>• <b>未读</b>：您已看过但<b>有新回复</b>的主题。</div>" +
+            "<div><b style='color:#25AAE2; font-size:15px;'>热门 / 排行榜</b><br>基于浏览量、回复数筛选的高热度内容。</div>",
         },
       },
       {
+        device: 0,
         element: ".category-drop",
         popover: {
           title: "按类别筛选",
@@ -78,11 +138,12 @@ export default apiInitializer((api) => {
         },
       },
       {
+        device: 0,
         element: ".tag-drop",
         popover: {
           title: "按标签筛选",
           description:
-              "通过标签快速过滤出你感兴趣的特定内容。<br><span style='color:#E45735; font-weight:bold;'>选择“精华”标签，即可筛选出所有“精华”内容！</span>",
+            "通过标签快速过滤出你感兴趣的特定内容。<br><span style='color:#E45735; font-weight:bold;'>选择“精华”标签，即可筛选出所有“精华”内容！</span>",
         },
       },
       {
@@ -90,7 +151,7 @@ export default apiInitializer((api) => {
         popover: {
           title: "话题标题",
           description:
-              "这是话题标题。点击<b>标题</b>以及周边空白区域即可进入详情页浏览帖子内容。",
+            "这是话题标题。点击<b>标题</b>以及周边空白区域即可进入详情页浏览帖子内容。",
         },
       },
       {
@@ -112,7 +173,7 @@ export default apiInitializer((api) => {
         popover: {
           title: "聊天消息",
           description:
-              "这里会显示你的聊天通知。点击可以快速打开聊天弹窗或全屏聊天窗口。",
+            "这里会显示你的聊天通知。点击可以快速打开聊天弹窗或全屏聊天窗口。",
         },
       },
       {
@@ -120,20 +181,20 @@ export default apiInitializer((api) => {
         popover: {
           title: "个人中心",
           description:
-              "点击这里可以查看通知、私信和书签。<br><br><b style='color:#E45735;'>点击“下一步”，我们将自动为您打开菜单并介绍详细功能。</b>",
+            "点击这里可以查看通知、私信和书签。<br><br><b style='color:#E45735;'>点击“下一步”，我们将自动为您打开菜单并介绍详细功能。</b>",
         },
         onHighlighted: (element) => {
           const target =
-              element &&
-              (element.querySelector("button, a, .header-dropdown-toggle") ||
-                  element);
+            element &&
+            (element.querySelector("button, a, .header-dropdown-toggle") ||
+              element);
           if (target) {
             target.dispatchEvent(
-                new MouseEvent("click", {
-                  bubbles: true,
-                  cancelable: true,
-                  view: window,
-                })
+              new MouseEvent("click", {
+                bubbles: true,
+                cancelable: true,
+                view: window,
+              })
             );
           }
         },
@@ -143,7 +204,7 @@ export default apiInitializer((api) => {
         popover: {
           title: "所有通知",
           description:
-              "这是您的<b style='color:#e67e22;'>消息总览</b>。<br>收到的点赞、被引用、系统通知都会汇总在这里。",
+            "这是您的<b style='color:#e67e22;'>消息总览</b>。<br>收到的点赞、被引用、系统通知都会汇总在这里。",
         },
       },
       {
@@ -151,7 +212,7 @@ export default apiInitializer((api) => {
         popover: {
           title: "回复通知",
           description:
-              "专门显示<b style='color:#00a65a;'>别人对您的回复</b>。<br>想知道谁在和您对话？看这里就对了。",
+            "专门显示<b style='color:#00a65a;'>别人对您的回复</b>。<br>想知道谁在和您对话？看这里就对了。",
         },
       },
       {
@@ -159,7 +220,7 @@ export default apiInitializer((api) => {
         popover: {
           title: "私信",
           description:
-              "这是您的<b style='color:#0088cc;'>私人信箱</b>。<br>用于查看用户间的私聊消息以及机器人发送的通知。",
+            "这是您的<b style='color:#0088cc;'>私人信箱</b>。<br>用于查看用户间的私聊消息以及机器人发送的通知。",
         },
       },
       {
@@ -167,7 +228,7 @@ export default apiInitializer((api) => {
         popover: {
           title: "书签收藏",
           description:
-              "您收藏的帖子都在这儿。<br>遇到好内容来不及看？点击帖子下方的<b>书签图标</b>，稍后在这里阅读。",
+            "您收藏的帖子都在这儿。<br>遇到好内容来不及看？点击帖子下方的<b>书签图标</b>，稍后在这里阅读。",
         },
       },
       {
@@ -175,7 +236,7 @@ export default apiInitializer((api) => {
         popover: {
           title: "聊天通知",
           description:
-              "显示来自<b style='color:#9b59b6;'>公共频道</b>或<b style='color:#9b59b6;'>私聊频道</b>的即时消息提醒。",
+            "显示来自<b style='color:#9b59b6;'>公共频道</b>或<b style='color:#9b59b6;'>私聊频道</b>的即时消息提醒。",
         },
       },
       {
@@ -183,7 +244,7 @@ export default apiInitializer((api) => {
         popover: {
           title: "其他通知",
           description:
-              "<div>获得勋章、被邀请加入话题等低频通知会归类到这里。</div>",
+            "<div>获得勋章、被邀请加入话题等低频通知会归类到这里。</div>",
         },
       },
       {
@@ -191,7 +252,7 @@ export default apiInitializer((api) => {
         popover: {
           title: "个人资料",
           description:
-              "点击进入您的<b style='color:#2c3e50;'>个人主页</b>。<br>您可以在这里修改头像、更改密码、调整<b style='color:#2980b9;'>偏好设置</b>或查看您的发帖记录。",
+            "点击进入您的<b style='color:#2c3e50;'>个人主页</b>。<br>您可以在这里修改头像、更改密码、调整<b style='color:#2980b9;'>偏好设置</b>或查看您的发帖记录。",
         },
       },
       {
@@ -201,93 +262,17 @@ export default apiInitializer((api) => {
           description: "你可以进入任意帖子或者个人主页，再次点击本按钮进入引导。",
         },
         onHighlighted: () => {
-          // 自动关闭用户菜单，恢复界面整洁
           const container = document.querySelector("#current-user");
           if (!container) return;
           const target =
-              container.querySelector("button, a, .header-dropdown-toggle") ||
-              container;
+            container.querySelector("button, a, .header-dropdown-toggle") ||
+            container;
           target.dispatchEvent(
-              new MouseEvent("click", {
-                bubbles: true,
-                cancelable: true,
-                view: window,
-              })
-          );
-        },
-      },
-    ],
-
-    // --- 手机端引导步骤 ---
-    stepsMobile: [
-      {
-        element: "#tour-trigger-btn",
-        popover: {
-          title: "欢迎 (手机版)",
-          description: "这里是为手机用户定制的操作指南。",
-        },
-      },
-      {
-        element: "#welcome-banner-search-input",
-        popover: {
-          title: "搜索",
-          description: "在这里输入关键词搜索。",
-        },
-      },
-      {
-        element: "#navigation-bar",
-        popover: {
-          title: "切换视图",
-          description: "点击这里切换“最新”、“热门”帖子。",
-        },
-      },
-      {
-        element: "#create-topic",
-        popover: {
-          title: "发帖",
-          description: "点击这里发布新话题。",
-        },
-      },
-      {
-        element: "#current-user",
-        popover: {
-          title: "个人中心",
-          description: "点击头像查看消息和设置。",
-        },
-        onHighlighted: (element) => {
-          const target =
-              element &&
-              (element.querySelector("button, a, .header-dropdown-toggle") ||
-                  element);
-          if (target) {
-            target.dispatchEvent(
-                new MouseEvent("click", {
-                  bubbles: true,
-                  cancelable: true,
-                  view: window,
-                })
-            );
-          }
-        },
-      },
-      {
-        element: "##tour-trigger-btn",
-        popover: {
-          title: "🎉 恭喜你完成首页引导！",
-          description: "你可以进入任意帖子或者个人主页，再次点击本按钮进入引导",
-        },
-        onHighlighted: () => {
-          const container = document.querySelector("#current-user");
-          if (!container) return;
-          const target =
-              container.querySelector("button, a, .header-dropdown-toggle") ||
-              container;
-          target.dispatchEvent(
-              new MouseEvent("click", {
-                bubbles: true,
-                cancelable: true,
-                view: window,
-              })
+            new MouseEvent("click", {
+              bubbles: true,
+              cancelable: true,
+              view: window,
+            })
           );
         },
       },
@@ -328,12 +313,14 @@ export default apiInitializer((api) => {
 
     // 3. 设备检测与配置加载
     const isMobile = window.innerWidth <= 600;
-    let currentSteps = isMobile
-        ? TOUR_CONFIG.stepsMobile
-        : TOUR_CONFIG.stepsDesktop;
+    const currentSteps = TOUR_CONFIG.steps.filter((step) => {
+      if (step.device === 0) return !isMobile;
+      if (step.device === 1) return isMobile;
+      return true;
+    });
 
     console.log(
-        `[Tour] Mode: ${isMobile ? "Mobile" : "Desktop"}, Steps: ${currentSteps.length}`
+      `[Tour] Mode: ${isMobile ? "Mobile" : "Desktop"}, Steps: ${currentSteps.length}`
     );
 
     // 5. 启动引导
@@ -342,7 +329,7 @@ export default apiInitializer((api) => {
       progressText: "第 {{current}} / {{total}} 步",
       allowClose: true,
       popoverClass: "tour-popover",
-      animate: !isMobile,
+      animate: true,
       showButtons: ["next", "previous", "close"],
       nextBtnText: "下一步",
       prevBtnText: "上一步",
