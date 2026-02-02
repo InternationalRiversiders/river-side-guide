@@ -1,4 +1,5 @@
 import { apiInitializer } from "discourse/lib/api";
+import DiscourseURL from "discourse/lib/url";
 // === Embedded driver.js (from dist/driver.js.iife.js) ===
 const __driverGlobal = typeof window !== "undefined" ? window : globalThis;
 if (!__driverGlobal.driver || !__driverGlobal.driver.js) {
@@ -9,6 +10,15 @@ if (!__driverGlobal.driver || !__driverGlobal.driver.js) {
 
 
 export default apiInitializer((api) => {
+  // 目标帖子 ID：首页引导完成后跳转到 `/t/{topicID}`
+  const TOPIC_TARGET_ID = 19;
+  // sessionStorage 标记 key：用于跨页面触发帖子页引导
+  const TOUR_PENDING_KEY = "riverside_guide_pending_tour";
+  // sessionStorage 标记 value：仅当值匹配时才启动帖子页引导
+  const TOUR_PENDING_VALUE = "topic";
+  // 防重复启动：避免同一页面多次触发帖子页引导
+  let pendingTopicTourStarted = false;
+
   // =================================================================
   // 1. 教程配置 (TOUR CONFIGURATION)
   // =================================================================
@@ -319,6 +329,13 @@ export default apiInitializer((api) => {
           description: "在这里进行回复、分享或其他帖子相关操作。",
         },
       },
+      {
+        element: ".topic-link",
+        popover: {
+          title: "跳转至最上方",
+          description: "点击上方标题，即可跳转至帖子开头",
+        },
+      },
     ],
   };
 
@@ -335,7 +352,7 @@ export default apiInitializer((api) => {
 
     const { pathname } = window.location;
     const isHomePage = pathname === "/";
-    const isTopicPage = /^\/t\/[^/]+\/\d+/.test(pathname);
+    const isTopicPage = /^\/t\/(?:[^/]+\/)?\d+/.test(pathname);
 
     if (!isHomePage && !isTopicPage) {
       console.warn("[Tour] 当前页面不是首页或帖子页，已跳过引导。");
@@ -361,8 +378,35 @@ export default apiInitializer((api) => {
       `[Tour] Page: ${pageLabel}, Mode: ${isMobile ? "Mobile" : "Desktop"}, Steps: ${currentSteps.length}`
     );
 
+    let driverObj;
+    if (isHomePage && currentSteps.length > 0) {
+      const lastIndex = currentSteps.length - 1;
+      const lastStep = currentSteps[lastIndex];
+      if (lastStep && lastStep.popover) {
+        currentSteps[lastIndex] = {
+          ...lastStep,
+          popover: {
+            ...lastStep.popover,
+            onNextClick: () => {
+              if (!driverObj) return;
+              if (driverObj.isLastStep()) {
+                console.log(
+                  `[Tour] Home last step -> set pending '${TOUR_PENDING_KEY}=${TOUR_PENDING_VALUE}', routeTo /t/${TOPIC_TARGET_ID}`
+                );
+                sessionStorage.setItem(TOUR_PENDING_KEY, TOUR_PENDING_VALUE);
+                driverObj.destroy();
+                DiscourseURL.routeTo(`/t/${TOPIC_TARGET_ID}`);
+                return;
+              }
+              driverObj.moveNext();
+            },
+          },
+        };
+      }
+    }
+
     // 5. 启动引导
-    const driverObj = driver({
+    driverObj = driver({
       showProgress: true,
       progressText: "第 {{current}} / {{total}} 步",
       allowClose: true,
@@ -415,16 +459,90 @@ export default apiInitializer((api) => {
       return;
     }
 
-    // 使用 onPageChange 确保在路由跳转后按钮依然显示
-    api.onPageChange(() => {
+    const updateTourButtonVisibility = () => {
       const existingBtn = document.getElementById("tour-trigger-btn");
-      if (existingBtn) existingBtn.style.display = "flex";
+      if (!existingBtn) return;
+      const isHomePage = window.location.pathname === "/";
+      existingBtn.style.display = isHomePage ? "flex" : "none";
+    };
+
+    // 使用 onPageChange 确保在路由跳转后按钮显示逻辑正确
+    api.onPageChange(() => {
+      updateTourButtonVisibility();
     });
 
-    btn.style.display = "flex";
+    updateTourButtonVisibility();
   }
 
   requestAnimationFrame(initTourButton);
 
+  function waitForElement(selector, timeoutMs = 6000, intervalMs = 150) {
+    return new Promise((resolve) => {
+      const start = Date.now();
+      const timer = setInterval(() => {
+        const found = document.querySelector(selector);
+        if (found) {
+          clearInterval(timer);
+          resolve(found);
+          return;
+        }
+        if (Date.now() - start >= timeoutMs) {
+          clearInterval(timer);
+          resolve(null);
+        }
+      }, intervalMs);
+    });
+  }
+
+  async function startTopicTourIfPending() {
+    console.log("[Tour] Pending check: startTopicTourIfPending()");
+    if (pendingTopicTourStarted) {
+      console.log("[Tour] Pending check: already started, skip.");
+      return;
+    }
+    const pending = sessionStorage.getItem(TOUR_PENDING_KEY);
+    if (pending !== TOUR_PENDING_VALUE) {
+      console.log(
+        `[Tour] Pending check: key=${TOUR_PENDING_KEY} value=${pending} (expected ${TOUR_PENDING_VALUE}), skip.`
+      );
+      return;
+    }
+
+    const isTopicPage = /^\/t\/(?:[^/]+\/)?\d+/.test(window.location.pathname);
+    console.log(
+      `[Tour] Pending check: path=${window.location.pathname}, isTopicPage=${isTopicPage}`
+    );
+    if (!isTopicPage) {
+      console.log("[Tour] Pending check: not on topic page, skip.");
+      return;
+    }
+
+    pendingTopicTourStarted = true;
+    sessionStorage.removeItem(TOUR_PENDING_KEY);
+    console.log("[Tour] Pending check: consumed pending flag, wait for #topic-title.");
+
+    const target = await waitForElement("#topic-title");
+    if (!target) {
+      console.warn("[Tour] Pending check: #topic-title not found, abort.");
+      pendingTopicTourStarted = false;
+      return;
+    }
+
+    console.log("[Tour] Pending check: #topic-title found, startTour().");
+    startTour();
+    // 允许后续再次触发（只要 pending key 被重新写入）
+    pendingTopicTourStarted = false;
+  }
+
   console.log("[Tour] Component loaded.");
+
+  api.onPageChange(() => {
+    requestAnimationFrame(() => {
+      startTopicTourIfPending();
+    });
+  });
+
+  requestAnimationFrame(() => {
+    startTopicTourIfPending();
+  });
 });
