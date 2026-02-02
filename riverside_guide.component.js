@@ -19,6 +19,58 @@ export default apiInitializer((api) => {
   // 防重复启动：避免同一页面多次触发帖子页引导
   let pendingTopicTourStarted = false;
 
+  // === 校友认证引导配置 ===
+  // 认证教程帖子的目标路径（格式："/t/{topicID}"）
+  const CERT_TUTORIAL_PATH = "/t/5"; // 例如："/t/123"
+  // 已认证用户组名；若为空字符串则始终显示提示
+  const VERIFIED_GROUP_NAME = "";
+
+  // 获取当前用户组的字符串数组（name 列表）
+  function getCurrentUserGroupNames() {
+    try {
+      const app = window.require && window.require("discourse/app").default;
+      const currentUser = app?.__container__?.lookup("service:current-user");
+      if (currentUser) {
+        return (currentUser.groups || currentUser.group_users?.map((g) => g.group) || []).map(
+          (g) => g.name
+        );
+      }
+    } catch {}
+
+    try {
+      const User = window.require && window.require("discourse/models/user").default;
+      const user = User?.current?.();
+      if (user) {
+        return (user.groups || user.group_users?.map((g) => g.group) || []).map(
+          (g) => g.name
+        );
+      }
+    } catch {}
+
+    try {
+      const user = window.Discourse?.User?.current?.();
+      if (user) {
+        return (user.groups || user.group_users?.map((g) => g.group) || []).map(
+          (g) => g.name
+        );
+      }
+    } catch {}
+
+    return [];
+  }
+
+  const currentUserGroupNames = getCurrentUserGroupNames();
+  window.riversideGuideUserGroups = currentUserGroupNames;
+
+  function getCertificationTutorialPath() {
+    return CERT_TUTORIAL_PATH || "";
+  }
+
+  function shouldShowCertificationStep(groupNames) {
+    if (!VERIFIED_GROUP_NAME) return true;
+    return !groupNames.includes(VERIFIED_GROUP_NAME);
+  }
+
   // =================================================================
   // 1. 教程配置 (TOUR CONFIGURATION)
   // =================================================================
@@ -297,8 +349,7 @@ export default apiInitializer((api) => {
     ],
   };
 
-  const TOPIC_TOUR_CONFIG = {
-    steps: [
+  const topicTourSteps = [
       {
         popover: {
           title: "欢迎来到帖子页",
@@ -336,7 +387,31 @@ export default apiInitializer((api) => {
           description: "点击上方标题，即可跳转至帖子开头",
         },
       },
-    ],
+    ];
+
+  if (shouldShowCertificationStep(currentUserGroupNames)) {
+    topicTourSteps.push({
+      popover: {
+        title: "你还没有完成校友认证",
+        description:
+          "认证成为校友之后才能体验完整论坛内容，点击下方按钮跳转至“校友认证教程”。",
+        showButtons: ["next"],
+        nextBtnText: "跳转认证教程",
+        onNextClick: (_el, _step, { driver }) => {
+          const path = getCertificationTutorialPath();
+          if (!path) {
+            console.warn("[Tour] 认证教程路径未配置。");
+            return;
+          }
+          driver?.destroy?.();
+          DiscourseURL.routeTo(path);
+        },
+      },
+    });
+  }
+
+  const TOPIC_TOUR_CONFIG = {
+    steps: topicTourSteps,
   };
 
   // --- 手动启动函数 ---
