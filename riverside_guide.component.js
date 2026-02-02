@@ -323,10 +323,9 @@ export default apiInitializer((api) => {
         },
       },
       {
-        element: "#tour-trigger-btn",
         popover: {
           title: "恭喜你完成首页引导！",
-          description: "你可以进入任意帖子或者个人主页，再次点击本按钮进入引导。",
+          description: "接下来将跳转到示例帖子页面进行帖子页引导",
         },
         onHighlighted: () => {
           const container = document.querySelector("#current-user");
