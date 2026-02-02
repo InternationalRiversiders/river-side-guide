@@ -1,6 +1,6 @@
 import { apiInitializer } from "discourse/lib/api";
 import DiscourseURL from "discourse/lib/url";
-// === Embedded driver.js (from dist/driver.js.iife.js) ===
+// === Embedded Driver.js bundle (source: dist/driver.js.iife.js) ===
 const __driverGlobal = typeof window !== "undefined" ? window : globalThis;
 if (!__driverGlobal.driver || !__driverGlobal.driver.js) {
   __driverGlobal.driver = __driverGlobal.driver || {};
@@ -10,22 +10,22 @@ if (!__driverGlobal.driver || !__driverGlobal.driver.js) {
 
 
 export default apiInitializer((api) => {
-  // 目标帖子 ID：首页引导完成后跳转
+  // 首页引导结束后的目标主题 ID（仅填数字）
   const TOPIC_TARGET_ID = 19;
-  // sessionStorage 标记 key：用于跨页面触发帖子页引导
+  // sessionStorage key：用于跨页面触发帖子页引导
   const TOUR_PENDING_KEY = "riverside_guide_pending_tour";
-  // sessionStorage 标记 value：仅当值匹配时才启动帖子页引导
+  // sessionStorage value：仅当值匹配时才启动帖子页引导
   const TOUR_PENDING_VALUE = "topic";
-  // 防重复启动：避免同一页面多次触发帖子页引导
+  // 防重入：同一页面只触发一次 pending 引导
   let pendingTopicTourStarted = false;
 
-  // === 校友认证引导配置 ===
-  // 认证教程帖子的目标主题 ID（数字）
+  // === 校友认证提示配置 ===
+  // 校友认证教程主题 ID（仅填数字）
   const CERT_TUTORIAL_TOPIC_ID = 5;
-  // 已认证用户组名；若为空字符串则始终显示提示
+  // 已认证用户组名；留空则始终显示提示
   const VERIFIED_GROUP_NAME = "";
 
-  // 获取当前用户组的字符串数组（name 列表）
+  // 获取当前用户所属的用户组名称列表（字符串数组）
   function getCurrentUserGroupNames() {
     try {
       const app = window.require && window.require("discourse/app").default;
@@ -72,14 +72,11 @@ export default apiInitializer((api) => {
   }
 
   // =================================================================
-  // 1. 教程配置 (TOUR CONFIGURATION)
+  // 引导配置 (TOUR CONFIGURATION)
   // =================================================================
   const HOME_TOUR_CONFIG = {
     steps: [
-      // --- 引导步骤 不配置device为通用device: 0) ---
-      // 不配置 device：通用
-      // device = 0：仅电脑端
-      // device = 1：仅手机端
+      // device：0=仅桌面端，1=仅移动端；不填=通用
       {
         popover: {
           title: "欢迎来到 riverside",
@@ -422,7 +419,7 @@ export default apiInitializer((api) => {
     getSteps: buildTopicTourSteps,
   };
 
-  // --- 手动启动函数 ---
+  // 手动触发引导入口（支持首页/帖子页）
   function startTour() {
     if (!window.driver || !window.driver.js || !window.driver.js.driver) {
       console.warn("[Tour] Driver.js 未加载");
@@ -453,7 +450,7 @@ export default apiInitializer((api) => {
       console.warn("[Tour] Warning: '#create-topic' not found.");
     }
 
-    // 3. 设备检测与配置加载
+    // 按设备类型筛选步骤
     const isMobile = window.innerWidth <= 600;
     const currentSteps = activeSteps.filter((step) => {
       if (step.device === 0) return !isMobile;
@@ -492,7 +489,7 @@ export default apiInitializer((api) => {
       }
     }
 
-    // 5. 启动引导
+    // 初始化并启动 Driver.js
     driverObj = driver({
       showProgress: true,
       progressText: "第 {{current}} / {{total}} 步",
@@ -521,7 +518,7 @@ export default apiInitializer((api) => {
   window.startTour = startTour;
 
   // =================================================================
-  // 3. 按钮初始化与权限检查 (BUTTON & PERMISSION)
+  // 悬浮按钮初始化
   // =================================================================
   function initTourButton() {
     const DISMISS_KEY = "discourse_tour_btn_hidden_permanent";
@@ -530,14 +527,14 @@ export default apiInitializer((api) => {
 
     if (!btn || !closeBtn) return;
 
-    // 绑定事件（覆盖旧处理器即可）
+    // 绑定点击处理器（直接覆盖）
     const startHandler = () => window.startTour && window.startTour();
     btn.onclick = startHandler;
 
     closeBtn.onclick = (e) => {
       e.stopPropagation();
       btn.remove();
-      // localStorage.setItem(DISMISS_KEY, 'true');
+      // localStorage.setItem(DISMISS_KEY, "true"); // 如需永久隐藏按钮请启用
       console.log("[Tour] 按钮已隐藏 (调试模式)");
     };
 
@@ -552,7 +549,7 @@ export default apiInitializer((api) => {
       existingBtn.style.display = isHomePage ? "flex" : "none";
     };
 
-    // 使用 onPageChange 确保在路由跳转后按钮显示逻辑正确
+    // 路由切换后同步刷新按钮显示状态
     api.onPageChange(() => {
       updateTourButtonVisibility();
     });
@@ -616,7 +613,7 @@ export default apiInitializer((api) => {
 
     console.log("[Tour] Pending check: #topic-title found, startTour().");
     startTour();
-    // 允许后续再次触发（只要 pending key 被重新写入）
+    // 允许后续再次触发（只要 pending key 重新写入）
     pendingTopicTourStarted = false;
   }
 
