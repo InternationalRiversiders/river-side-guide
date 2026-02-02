@@ -10,7 +10,7 @@ if (!__driverGlobal.driver || !__driverGlobal.driver.js) {
 
 
 export default apiInitializer((api) => {
-  // 目标帖子 ID：首页引导完成后跳转到 `/t/{topicID}`
+  // 目标帖子 ID：首页引导完成后跳转
   const TOPIC_TARGET_ID = 19;
   // sessionStorage 标记 key：用于跨页面触发帖子页引导
   const TOUR_PENDING_KEY = "riverside_guide_pending_tour";
@@ -20,8 +20,8 @@ export default apiInitializer((api) => {
   let pendingTopicTourStarted = false;
 
   // === 校友认证引导配置 ===
-  // 认证教程帖子的目标路径（格式："/t/{topicID}"）
-  const CERT_TUTORIAL_PATH = "/t/5"; // 例如："/t/123"
+  // 认证教程帖子的目标主题 ID（数字）
+  const CERT_TUTORIAL_TOPIC_ID = 5;
   // 已认证用户组名；若为空字符串则始终显示提示
   const VERIFIED_GROUP_NAME = "";
 
@@ -59,11 +59,11 @@ export default apiInitializer((api) => {
     return [];
   }
 
-  const currentUserGroupNames = getCurrentUserGroupNames();
-  window.riversideGuideUserGroups = currentUserGroupNames;
-
   function getCertificationTutorialPath() {
-    return CERT_TUTORIAL_PATH || "";
+    if (!Number.isFinite(CERT_TUTORIAL_TOPIC_ID) || CERT_TUTORIAL_TOPIC_ID <= 0) {
+      return "";
+    }
+    return `/t/${CERT_TUTORIAL_TOPIC_ID}`;
   }
 
   function shouldShowCertificationStep(groupNames) {
@@ -349,7 +349,7 @@ export default apiInitializer((api) => {
     ],
   };
 
-  const topicTourSteps = [
+  const baseTopicTourSteps = [
       {
         popover: {
           title: "欢迎来到帖子页",
@@ -389,29 +389,37 @@ export default apiInitializer((api) => {
       },
     ];
 
-  if (shouldShowCertificationStep(currentUserGroupNames)) {
-    topicTourSteps.push({
-      popover: {
-        title: "你还没有完成校友认证",
-        description:
-          "认证成为校友之后才能体验完整论坛内容，点击下方按钮跳转至“校友认证教程”。",
-        showButtons: ["next"],
-        nextBtnText: "跳转认证教程",
-        onNextClick: (_el, _step, { driver }) => {
-          const path = getCertificationTutorialPath();
-          if (!path) {
-            console.warn("[Tour] 认证教程路径未配置。");
-            return;
-          }
-          driver?.destroy?.();
-          DiscourseURL.routeTo(path);
+  function buildTopicTourSteps() {
+    const steps = [...baseTopicTourSteps];
+    const groupNames = getCurrentUserGroupNames();
+    window.riversideGuideUserGroups = groupNames;
+
+    if (shouldShowCertificationStep(groupNames)) {
+      steps.push({
+        popover: {
+          title: "你还没有完成校友认证",
+          description:
+            "认证成为校友之后才能体验完整论坛内容，点击下方按钮跳转至“校友认证教程”。",
+          showButtons: ["next"],
+          nextBtnText: "跳转认证教程",
+          onNextClick: (_el, _step, { driver }) => {
+            const path = getCertificationTutorialPath();
+            if (!path) {
+              console.warn("[Tour] 认证教程主题 ID 未配置。");
+              return;
+            }
+            driver?.destroy?.();
+            DiscourseURL.routeTo(path);
+          },
         },
-      },
-    });
+      });
+    }
+
+    return steps;
   }
 
   const TOPIC_TOUR_CONFIG = {
-    steps: topicTourSteps,
+    getSteps: buildTopicTourSteps,
   };
 
   // --- 手动启动函数 ---
@@ -435,6 +443,10 @@ export default apiInitializer((api) => {
     }
 
     const activeConfig = isTopicPage ? TOPIC_TOUR_CONFIG : HOME_TOUR_CONFIG;
+    const activeSteps =
+      typeof activeConfig.getSteps === "function"
+        ? activeConfig.getSteps()
+        : activeConfig.steps || [];
     const pageLabel = isTopicPage ? "Topic" : "Home";
 
     if (isHomePage && !document.querySelector("#create-topic")) {
@@ -443,7 +455,7 @@ export default apiInitializer((api) => {
 
     // 3. 设备检测与配置加载
     const isMobile = window.innerWidth <= 600;
-    const currentSteps = activeConfig.steps.filter((step) => {
+    const currentSteps = activeSteps.filter((step) => {
       if (step.device === 0) return !isMobile;
       if (step.device === 1) return isMobile;
       return true;
