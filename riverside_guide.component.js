@@ -530,9 +530,8 @@ export default apiInitializer((api) => {
 
     if (!btn || !closeBtn) return;
 
-    // 绑定事件 (防止重复绑定，先移除再添加)
+    // 绑定事件（覆盖旧处理器即可）
     const startHandler = () => window.startTour && window.startTour();
-    btn.removeEventListener("click", startHandler); // 简易防抖，实际场景直接覆盖即可
     btn.onclick = startHandler;
 
     closeBtn.onclick = (e) => {
