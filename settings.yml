@@ -1,1 +1,14 @@
-{}
+# 首页引导完成后自动跳转到的目标帖子 ID（仅填写数字 ID，不是完整链接）
+home_tour_target_topic_id:
+  type: integer
+  default: 19
+
+# 校友认证教程帖子 ID（仅填写数字 ID；<=0 视为未配置）
+certification_tutorial_topic_id:
+  type: integer
+  default: 5
+
+# 已完成认证的用户组名称（精确匹配组名；留空则始终显示认证提示步骤）
+verified_group_name:
+  type: string
+  default: ""

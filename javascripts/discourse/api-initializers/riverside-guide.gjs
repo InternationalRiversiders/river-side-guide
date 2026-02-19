@@ -10,8 +10,15 @@ if (!__driverGlobal.driver || !__driverGlobal.driver.js) {
 
 
 export default apiInitializer((api) => {
+  const themeSettings = typeof settings === "undefined" ? {} : settings;
+
+  function parsePositiveInt(value, fallback) {
+    const parsed = Number.parseInt(value, 10);
+    return Number.isFinite(parsed) && parsed > 0 ? parsed : fallback;
+  }
+
   // 首页引导结束后的目标主题 ID（仅填数字）
-  const TOPIC_TARGET_ID = 19;
+  const TOPIC_TARGET_ID = parsePositiveInt(themeSettings.home_tour_target_topic_id, 19);
   // sessionStorage key：用于跨页面触发帖子页引导
   const TOUR_PENDING_KEY = "riverside_guide_pending_tour";
   // sessionStorage value：仅当值匹配时才启动帖子页引导
@@ -21,9 +28,12 @@ export default apiInitializer((api) => {
 
   // === 校友认证提示配置 ===
   // 校友认证教程主题 ID（仅填数字）
-  const CERT_TUTORIAL_TOPIC_ID = 5;
+  const CERT_TUTORIAL_TOPIC_ID = parsePositiveInt(
+    themeSettings.certification_tutorial_topic_id,
+    5
+  );
   // 已认证用户组名；留空则始终显示提示
-  const VERIFIED_GROUP_NAME = "";
+  const VERIFIED_GROUP_NAME = (themeSettings.verified_group_name || "").trim();
 
   // 获取当前用户所属的用户组名称列表（字符串数组）
   function getCurrentUserGroupNames() {
