@@ -13,6 +13,10 @@ if (!__driverGlobal.driver || !__driverGlobal.driver.js) {
 export default apiInitializer((api) => {
   const themeSettings = typeof settings === "undefined" ? {} : settings;
   const t = (key) => I18n.t(themePrefix(key));
+  const tourProgressText = t("tour.controls.progress", {
+    current: "{{current}}",
+    total: "{{total}}",
+  });
 
   function parsePositiveInt(value, fallback) {
     const parsed = Number.parseInt(value, 10);
@@ -481,7 +485,7 @@ export default apiInitializer((api) => {
     // 初始化并启动 Driver.js
     driverObj = driver({
       showProgress: true,
-      progressText: t("tour.controls.progress"),
+      progressText: tourProgressText,
       allowClose: true,
       popoverClass: "tour-popover",
       animate: true,
