@@ -25,7 +25,8 @@
 - `common/common.scss`：样式（含 driver.css 内嵌样式和自定义 UI）。
 - `common/footer.html`：悬浮按钮 HTML。
 - `common/head_tag.html`：头部说明（无外部 Driver.js 依赖）。
-- `locales/en.yml`：主题描述文案。
+- `locales/zh_CN.yml`：中文引导文案（当前主文案来源）。
+- `locales/en.yml`：英文文案键位（当前预留为空，待后续补全）。
 - `driver.js的API文档.md`：Driver.js 中文参考文档。
 
 ## 使用方式

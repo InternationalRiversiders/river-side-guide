@@ -1,0 +1,110 @@
+zh_CN:
+  theme_metadata:
+    description: "Riverside 新手引导组件"
+  tour:
+    trigger:
+      label: "新手教程"
+      title: "点击开始新手引导"
+      close_title: "关闭且不再显示"
+    controls:
+      progress: "第 {{current}} / {{total}} 步"
+      next: "下一步"
+      previous: "上一步"
+      done: "完成"
+      confirm_exit: "仍有未查看的引导流程，确定要退出引导吗？"
+    home:
+      welcome:
+        title: "欢迎来到 riverside"
+        description: "本论坛的风格与你熟悉的“清水河畔”有着完全不同的界面风格与使用逻辑。本教程将带你快速熟悉<b>首页</b>的核心功能。"
+      create_topic:
+        title: "发帖"
+        description: "点击这里发布新话题。"
+      mobile_nav:
+        title: "导航侧栏"
+        description: "点击这里展开社区导航栏。"
+      community:
+        title: "社区导航"
+        description: "这里包含了<b>所有话题</b>、<b>我的消息</b>、<b>我的帖子</b>等常用入口。"
+      categories:
+        title: "版块列表"
+        description: "这里列出了论坛的所有版块。点击展开或折叠，快速跳转到你感兴趣的分区。<br><br><span style='color:#E45735; font-weight:bold;'>你可以点击右上角的按钮来自定义显示的版块。</span>"
+      chat_channels:
+        title: "公共聊天室"
+        description: "<div style='margin-bottom:6px;'><b>校友广场</b>：可以与论坛中的同学与校友实时互动。</div><div><b>二手交流</b>：二手交流信息、优惠券红包码，均在这里分享。</div>"
+      mobile_search:
+        title: "搜索"
+        description: "点击进入搜索界面，可搜索全站内容"
+      desktop_search:
+        title: "快速搜索"
+        description: "直接在这里输入关键词，即可检索全站内容。"
+      advanced_search:
+        title: "高级搜索"
+        description: "点击此图标进入<b>高级搜索</b>，可以根据 <b style='color:#0088CC'>分类</b>、<b style='color:#0088CC'>话题</b>、<b style='color:#0088CC'>标签</b>、<b style='color:#0088CC'>发帖人</b> 等条件进行精确搜索。"
+      sorting:
+        title: "话题列表排序"
+        description: "<div style='margin-bottom:8px;'><b style='color:#25AAE2; font-size:15px;'>最新发表</b><br>按发布时间排序，展示全站<b>最新创建的主题</b>。适合希望第一时间获取新鲜资讯的用户。</div><div style='margin-bottom:8px;'><b style='color:#25AAE2; font-size:15px;'>最新回复</b><br>按最后回复时间排序，显示<b>最近被活跃讨论的主题</b>。</div><div style='margin-bottom:8px;'><b style='color:#25AAE2; font-size:15px;'>未读 / 未读话题</b><br>• <b>未读话题</b>：您尚未浏览过的主题。<br>• <b>未读</b>：您已看过但<b>有新回复</b>的主题。</div><div><b style='color:#25AAE2; font-size:15px;'>热门 / 排行榜</b><br>基于浏览量、回复数筛选的高热度内容。</div>"
+      category_filter:
+        title: "按类别筛选"
+        description: "点击这里按版块筛选话题。"
+      tag_filter:
+        title: "按标签筛选"
+        description: "通过标签快速过滤出你感兴趣的特定内容。<br><span style='color:#E45735; font-weight:bold;'>选择“精华”标签，即可筛选出所有“精华”内容！</span>"
+      topic_title:
+        title: "话题标题"
+        description: "这是话题标题。点击<b>标题</b>以及周边空白区域即可进入详情页浏览帖子内容。"
+      replies:
+        title: "回复数"
+        description: "这是该话题收到的<b>回帖数</b>。"
+      last_replier:
+        title: "最新回复用户"
+        description: "这是最新回复该话题的用户名以及回复时间。"
+      chat_notifications:
+        title: "聊天消息"
+        description: "这里会显示你的聊天通知。点击可以快速打开聊天弹窗或全屏聊天窗口。"
+      user_center:
+        title: "个人中心"
+        description: "点击这里可以查看通知、私信和书签。<br><br><b style='color:#E45735;'>点击“下一步”，我们将自动为您打开菜单并介绍详细功能。</b>"
+      menu_all_notifications:
+        title: "所有通知"
+        description: "这是您的<b style='color:#e67e22;'>消息总览</b>。<br>收到的点赞、被引用、系统通知都会汇总在这里。"
+      menu_replies:
+        title: "回复通知"
+        description: "专门显示<b style='color:#00a65a;'>别人对您的回复</b>。<br>想知道谁在和您对话？看这里就对了。"
+      menu_messages:
+        title: "私信"
+        description: "这是您的<b style='color:#0088cc;'>私人信箱</b>。<br>用于查看用户间的私聊消息以及机器人发送的通知。"
+      menu_bookmarks:
+        title: "书签收藏"
+        description: "您收藏的帖子都在这儿。<br>遇到好内容来不及看？点击帖子下方的<b>书签图标</b>，稍后在这里阅读。"
+      menu_chat_notifications:
+        title: "聊天通知"
+        description: "显示来自<b style='color:#9b59b6;'>公共频道</b>或<b style='color:#9b59b6;'>私聊频道</b>的即时消息提醒。"
+      menu_other_notifications:
+        title: "其他通知"
+        description: "<div>获得勋章、被邀请加入话题等低频通知会归类到这里。</div>"
+      menu_profile:
+        title: "个人资料"
+        description: "点击进入您的<b style='color:#2c3e50;'>个人主页</b>。<br>您可以在这里修改头像、更改密码、调整<b style='color:#2980b9;'>偏好设置</b>或查看您的发帖记录。"
+      complete:
+        title: "恭喜你完成首页引导！"
+        description: "接下来将跳转到示例帖子页面进行帖子页引导"
+    topic:
+      welcome:
+        title: "欢迎来到帖子页"
+        description: "本引导将帮助你了解帖子页的核心功能。"
+      topic_title:
+        title: "帖子标题"
+        description: "这里显示当前帖子的标题与相关信息。"
+      timeline:
+        title: "时间轴导航"
+        description: "<p>这是 Discourse 特有的时间轴。</p><p>拖动滑块可以快速跳转楼层，或者<span style='font-size: large'>点击顶部/底部的日期直接跳转到第一楼或最新一楼</span></p>"
+      actions:
+        title: "回复与操作"
+        description: "在这里进行回复、分享或其他帖子相关操作。"
+      back_to_top:
+        title: "跳转至最上方"
+        description: "点击上方标题，即可跳转至帖子开头"
+      certification:
+        title: "你还没有完成校友认证"
+        description: "认证成为校友之后才能体验完整论坛内容，点击下方按钮跳转至“校友认证教程”。"
+        next_btn: "跳转认证教程"

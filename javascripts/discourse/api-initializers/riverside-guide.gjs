@@ -1,5 +1,7 @@
 import { apiInitializer } from "discourse/lib/api";
 import DiscourseURL from "discourse/lib/url";
+import I18n from "I18n";
+import { themePrefix } from "discourse/lib/theme-settings-store";
 // === Embedded Driver.js bundle (source: dist/driver.js.iife.js) ===
 const __driverGlobal = typeof window !== "undefined" ? window : globalThis;
 if (!__driverGlobal.driver || !__driverGlobal.driver.js) {
@@ -11,6 +13,7 @@ if (!__driverGlobal.driver || !__driverGlobal.driver.js) {
 
 export default apiInitializer((api) => {
   const themeSettings = typeof settings === "undefined" ? {} : settings;
+  const t = (key) => I18n.t(themePrefix(key));
 
   function parsePositiveInt(value, fallback) {
     const parsed = Number.parseInt(value, 10);
@@ -89,24 +92,24 @@ export default apiInitializer((api) => {
       // device：0=仅桌面端，1=仅移动端；不填=通用
       {
         popover: {
-          title: "欢迎来到 riverside",
-          description: "本论坛的风格与你熟悉的“清水河畔”有着完全不同的界面风格与使用逻辑。本教程将带你快速熟悉<b>首页</b>的核心功能。",
+          title: t("tour.home.welcome.title"),
+          description: t("tour.home.welcome.description"),
         },
       },
       {
         device: 0,
         element: "#create-topic",
         popover: {
-          title: "发帖",
-          description: "点击这里发布新话题。",
+          title: t("tour.home.create_topic.title"),
+          description: t("tour.home.create_topic.description"),
         },
       },
       {
         device: 1,
         element: "#toggle-hamburger-menu",
         popover: {
-          title: "导航侧栏",
-          description: "点击这里展开社区导航栏。",
+          title: t("tour.home.mobile_nav.title"),
+          description: t("tour.home.mobile_nav.description"),
         },
         onHighlighted: (element) => {
           const target = element || document.querySelector("#toggle-hamburger-menu");
@@ -124,33 +127,30 @@ export default apiInitializer((api) => {
       {
         element: '[data-section-name="community"]',
         popover: {
-          title: "社区导航",
-          description: "这里包含了<b>所有话题</b>、<b>我的消息</b>、<b>我的帖子</b>等常用入口。",
+          title: t("tour.home.community.title"),
+          description: t("tour.home.community.description"),
         },
       },
       {
         element: '[data-section-name="categories"]',
         popover: {
-          title: "版块列表",
-          description:
-            "这里列出了论坛的所有版块。点击展开或折叠，快速跳转到你感兴趣的分区。<br><br><span style='color:#E45735; font-weight:bold;'>你可以点击右上角的按钮来自定义显示的版块。</span>",
+          title: t("tour.home.categories.title"),
+          description: t("tour.home.categories.description"),
         },
       },
       {
         element: '[data-section-name="chat-channels"]',
         popover: {
-          title: "公共聊天室",
-          description:
-            "<div style='margin-bottom:6px;'><b>校友广场</b>：可以与论坛中的同学与校友实时互动。</div>" +
-            "<div><b>二手交流</b>：二手交流信息、优惠券红包码，均在这里分享。</div>",
+          title: t("tour.home.chat_channels.title"),
+          description: t("tour.home.chat_channels.description"),
         },
       },
       {
         device: 1,
         element: "#search-button",
         popover: {
-          title: "搜索",
-          description: "点击进入搜索界面，可搜索全站内容",
+          title: t("tour.home.mobile_search.title"),
+          description: t("tour.home.mobile_search.description"),
         },
         onHighlighted: () => {
           const toggle = document.querySelector("#toggle-hamburger-menu");
@@ -169,8 +169,8 @@ export default apiInitializer((api) => {
         device: 0,
         element: "#welcome-banner-search-input",
         popover: {
-          title: "快速搜索",
-          description: "直接在这里输入关键词，即可检索全站内容。",
+          title: t("tour.home.desktop_search.title"),
+          description: t("tour.home.desktop_search.description"),
         },
         onHighlighted: () => {
           const toggle = document.querySelector("#toggle-hamburger-menu");
@@ -189,76 +189,67 @@ export default apiInitializer((api) => {
         device: 0,
         element: ".show-advanced-search",
         popover: {
-          title: "高级搜索",
-          description:
-            "点击此图标进入<b>高级搜索</b>，可以根据 <b style='color:#0088CC'>分类</b>、<b style='color:#0088CC'>话题</b>、<b style='color:#0088CC'>标签</b>、<b style='color:#0088CC'>发帖人</b> 等条件进行精确搜索。",
+          title: t("tour.home.advanced_search.title"),
+          description: t("tour.home.advanced_search.description"),
         },
       },
       {
         device: 0,
         element: "#navigation-bar",
         popover: {
-          title: "话题列表排序",
-          description:
-            "<div style='margin-bottom:8px;'><b style='color:#25AAE2; font-size:15px;'>最新发表</b><br>按发布时间排序，展示全站<b>最新创建的主题</b>。适合希望第一时间获取新鲜资讯的用户。</div>" +
-            "<div style='margin-bottom:8px;'><b style='color:#25AAE2; font-size:15px;'>最新回复</b><br>按最后回复时间排序，显示<b>最近被活跃讨论的主题</b>。</div>" +
-            "<div style='margin-bottom:8px;'><b style='color:#25AAE2; font-size:15px;'>未读 / 未读话题</b><br>• <b>未读话题</b>：您尚未浏览过的主题。<br>• <b>未读</b>：您已看过但<b>有新回复</b>的主题。</div>" +
-            "<div><b style='color:#25AAE2; font-size:15px;'>热门 / 排行榜</b><br>基于浏览量、回复数筛选的高热度内容。</div>",
+          title: t("tour.home.sorting.title"),
+          description: t("tour.home.sorting.description"),
         },
       },
       {
         device: 0,
         element: ".category-drop",
         popover: {
-          title: "按类别筛选",
-          description: "点击这里按版块筛选话题。",
+          title: t("tour.home.category_filter.title"),
+          description: t("tour.home.category_filter.description"),
         },
       },
       {
         device: 0,
         element: ".tag-drop",
         popover: {
-          title: "按标签筛选",
-          description:
-            "通过标签快速过滤出你感兴趣的特定内容。<br><span style='color:#E45735; font-weight:bold;'>选择“精华”标签，即可筛选出所有“精华”内容！</span>",
+          title: t("tour.home.tag_filter.title"),
+          description: t("tour.home.tag_filter.description"),
         },
       },
       {
         element: ".topic-list-item .title",
         popover: {
-          title: "话题标题",
-          description:
-            "这是话题标题。点击<b>标题</b>以及周边空白区域即可进入详情页浏览帖子内容。",
+          title: t("tour.home.topic_title.title"),
+          description: t("tour.home.topic_title.description"),
         },
       },
       {
         element: ".topic-replies",
         popover: {
-          title: "回复数",
-          description: "这是该话题收到的<b>回帖数</b>。",
+          title: t("tour.home.replies.title"),
+          description: t("tour.home.replies.description"),
         },
       },
       {
         element: ".topic-list-item .topic-activity-data",
         popover: {
-          title: "最新回复用户",
-          description: "这是最新回复该话题的用户名以及回复时间。",
+          title: t("tour.home.last_replier.title"),
+          description: t("tour.home.last_replier.description"),
         },
       },
       {
         element: ".chat-header-icon",
         popover: {
-          title: "聊天消息",
-          description:
-            "这里会显示你的聊天通知。点击可以快速打开聊天弹窗或全屏聊天窗口。",
+          title: t("tour.home.chat_notifications.title"),
+          description: t("tour.home.chat_notifications.description"),
         },
       },
       {
         element: "#current-user",
         popover: {
-          title: "个人中心",
-          description:
-            "点击这里可以查看通知、私信和书签。<br><br><b style='color:#E45735;'>点击“下一步”，我们将自动为您打开菜单并介绍详细功能。</b>",
+          title: t("tour.home.user_center.title"),
+          description: t("tour.home.user_center.description"),
         },
         onHighlighted: (element) => {
           const target =
@@ -279,63 +270,56 @@ export default apiInitializer((api) => {
       {
         element: "#user-menu-button-all-notifications",
         popover: {
-          title: "所有通知",
-          description:
-            "这是您的<b style='color:#e67e22;'>消息总览</b>。<br>收到的点赞、被引用、系统通知都会汇总在这里。",
+          title: t("tour.home.menu_all_notifications.title"),
+          description: t("tour.home.menu_all_notifications.description"),
         },
       },
       {
         element: "#user-menu-button-replies",
         popover: {
-          title: "回复通知",
-          description:
-            "专门显示<b style='color:#00a65a;'>别人对您的回复</b>。<br>想知道谁在和您对话？看这里就对了。",
+          title: t("tour.home.menu_replies.title"),
+          description: t("tour.home.menu_replies.description"),
         },
       },
       {
         element: "#user-menu-button-messages",
         popover: {
-          title: "私信",
-          description:
-            "这是您的<b style='color:#0088cc;'>私人信箱</b>。<br>用于查看用户间的私聊消息以及机器人发送的通知。",
+          title: t("tour.home.menu_messages.title"),
+          description: t("tour.home.menu_messages.description"),
         },
       },
       {
         element: "#user-menu-button-bookmarks",
         popover: {
-          title: "书签收藏",
-          description:
-            "您收藏的帖子都在这儿。<br>遇到好内容来不及看？点击帖子下方的<b>书签图标</b>，稍后在这里阅读。",
+          title: t("tour.home.menu_bookmarks.title"),
+          description: t("tour.home.menu_bookmarks.description"),
         },
       },
       {
         element: "#user-menu-button-chat-notifications",
         popover: {
-          title: "聊天通知",
-          description:
-            "显示来自<b style='color:#9b59b6;'>公共频道</b>或<b style='color:#9b59b6;'>私聊频道</b>的即时消息提醒。",
+          title: t("tour.home.menu_chat_notifications.title"),
+          description: t("tour.home.menu_chat_notifications.description"),
         },
       },
       {
         element: "#user-menu-button-other-notifications",
         popover: {
-          title: "其他通知",
-          description:
-            "<div>获得勋章、被邀请加入话题等低频通知会归类到这里。</div>",
+          title: t("tour.home.menu_other_notifications.title"),
+          description: t("tour.home.menu_other_notifications.description"),
         },
       },
       {
         element: "#user-menu-button-profile",
         popover: {
-          title: "个人资料",
-          description:
-            "点击进入您的<b style='color:#2c3e50;'>个人主页</b>。<br>您可以在这里修改头像、更改密码、调整<b style='color:#2980b9;'>偏好设置</b>或查看您的发帖记录。",
+          title: t("tour.home.menu_profile.title"),
+          description: t("tour.home.menu_profile.description"),
         },
       },
       {
         popover: {
-          title: "恭喜你完成首页引导！",
-          description: "接下来将跳转到示例帖子页面进行帖子页引导",
+          title: t("tour.home.complete.title"),
+          description: t("tour.home.complete.description"),
         },
         onHighlighted: () => {
           const container = document.querySelector("#current-user");
@@ -358,39 +342,37 @@ export default apiInitializer((api) => {
   const baseTopicTourSteps = [
       {
         popover: {
-          title: "欢迎来到帖子页",
-          description: "本引导将帮助你了解帖子页的核心功能。",
+          title: t("tour.topic.welcome.title"),
+          description: t("tour.topic.welcome.description"),
         },
       },
       {
         element: "#topic-title",
         popover: {
-          title: "帖子标题",
-          description: "这里显示当前帖子的标题与相关信息。",
+          title: t("tour.topic.topic_title.title"),
+          description: t("tour.topic.topic_title.description"),
         },
       },
       {
         device: 0,
         element: ".timeline-scrollarea-wrapper",
         popover: {
-          title: "时间轴导航",
-          description:
-              "<p>这是 Discourse 特有的时间轴。</p>" +
-              "<p>拖动滑块可以快速跳转楼层，或者<span style='font-size: large'>点击顶部/底部的日期直接跳转到第一楼或最新一楼</span></p>",
+          title: t("tour.topic.timeline.title"),
+          description: t("tour.topic.timeline.description"),
         },
       },
       {
         element: "#topic-footer-buttons",
         popover: {
-          title: "回复与操作",
-          description: "在这里进行回复、分享或其他帖子相关操作。",
+          title: t("tour.topic.actions.title"),
+          description: t("tour.topic.actions.description"),
         },
       },
       {
         element: ".topic-link",
         popover: {
-          title: "跳转至最上方",
-          description: "点击上方标题，即可跳转至帖子开头",
+          title: t("tour.topic.back_to_top.title"),
+          description: t("tour.topic.back_to_top.description"),
         },
       },
     ];
@@ -403,11 +385,10 @@ export default apiInitializer((api) => {
     if (shouldShowCertificationStep(groupNames)) {
       steps.push({
         popover: {
-          title: "你还没有完成校友认证",
-          description:
-            "认证成为校友之后才能体验完整论坛内容，点击下方按钮跳转至“校友认证教程”。",
+          title: t("tour.topic.certification.title"),
+          description: t("tour.topic.certification.description"),
           showButtons: ["next"],
-          nextBtnText: "跳转认证教程",
+          nextBtnText: t("tour.topic.certification.next_btn"),
           onNextClick: (_el, _step, { driver }) => {
             const path = getCertificationTutorialPath();
             if (!path) {
@@ -501,17 +482,17 @@ export default apiInitializer((api) => {
     // 初始化并启动 Driver.js
     driverObj = driver({
       showProgress: true,
-      progressText: "第 {{current}} / {{total}} 步",
+      progressText: t("tour.controls.progress"),
       allowClose: true,
       popoverClass: "tour-popover",
       animate: true,
       showButtons: ["next", "previous", "close"],
-      nextBtnText: "下一步",
-      prevBtnText: "上一步",
-      doneBtnText: "完成",
+      nextBtnText: t("tour.controls.next"),
+      prevBtnText: t("tour.controls.previous"),
+      doneBtnText: t("tour.controls.done"),
       steps: currentSteps,
       onDestroyStarted: () => {
-        if (!driverObj.hasNextStep() || confirm("仍有未查看的引导流程，确定要退出引导吗？")) {
+        if (!driverObj.hasNextStep() || confirm(t("tour.controls.confirm_exit"))) {
           driverObj.destroy();
         }
       }
@@ -535,6 +516,26 @@ export default apiInitializer((api) => {
     const closeBtn = document.getElementById("tour-btn-close");
 
     if (!btn || !closeBtn) return;
+    const btnLabel = t("tour.trigger.label");
+    const btnTitle = t("tour.trigger.title");
+    const btnCloseTitle = t("tour.trigger.close_title");
+    const labelNode = btn.querySelector("span");
+
+    if (labelNode) {
+      labelNode.textContent = btnLabel;
+    }
+
+    if (btnTitle) {
+      btn.title = btnTitle;
+    } else {
+      btn.removeAttribute("title");
+    }
+
+    if (btnCloseTitle) {
+      closeBtn.title = btnCloseTitle;
+    } else {
+      closeBtn.removeAttribute("title");
+    }
 
     // 绑定点击处理器（直接覆盖）
     const startHandler = () => window.startTour && window.startTour();

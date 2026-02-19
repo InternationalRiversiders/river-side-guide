@@ -1,3 +1,110 @@
 en:
   theme_metadata:
     description: "Riverside onboarding guide component"
+  tour:
+    trigger:
+      label: ""
+      title: ""
+      close_title: ""
+    controls:
+      progress: ""
+      next: ""
+      previous: ""
+      done: ""
+      confirm_exit: ""
+    home:
+      welcome:
+        title: ""
+        description: ""
+      create_topic:
+        title: ""
+        description: ""
+      mobile_nav:
+        title: ""
+        description: ""
+      community:
+        title: ""
+        description: ""
+      categories:
+        title: ""
+        description: ""
+      chat_channels:
+        title: ""
+        description: ""
+      mobile_search:
+        title: ""
+        description: ""
+      desktop_search:
+        title: ""
+        description: ""
+      advanced_search:
+        title: ""
+        description: ""
+      sorting:
+        title: ""
+        description: ""
+      category_filter:
+        title: ""
+        description: ""
+      tag_filter:
+        title: ""
+        description: ""
+      topic_title:
+        title: ""
+        description: ""
+      replies:
+        title: ""
+        description: ""
+      last_replier:
+        title: ""
+        description: ""
+      chat_notifications:
+        title: ""
+        description: ""
+      user_center:
+        title: ""
+        description: ""
+      menu_all_notifications:
+        title: ""
+        description: ""
+      menu_replies:
+        title: ""
+        description: ""
+      menu_messages:
+        title: ""
+        description: ""
+      menu_bookmarks:
+        title: ""
+        description: ""
+      menu_chat_notifications:
+        title: ""
+        description: ""
+      menu_other_notifications:
+        title: ""
+        description: ""
+      menu_profile:
+        title: ""
+        description: ""
+      complete:
+        title: ""
+        description: ""
+    topic:
+      welcome:
+        title: ""
+        description: ""
+      topic_title:
+        title: ""
+        description: ""
+      timeline:
+        title: ""
+        description: ""
+      actions:
+        title: ""
+        description: ""
+      back_to_top:
+        title: ""
+        description: ""
+      certification:
+        title: ""
+        description: ""
+        next_btn: ""
