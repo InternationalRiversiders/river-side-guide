@@ -12,7 +12,7 @@ if (!__driverGlobal.driver || !__driverGlobal.driver.js) {
 
 export default apiInitializer((api) => {
   const themeSettings = typeof settings === "undefined" ? {} : settings;
-  const t = (key) => I18n.t(themePrefix(key));
+  const t = (key, options = {}) => I18n.t(themePrefix(key), options);
   const tourProgressText = t("tour.controls.progress", {
     current: "{{current}}",
     total: "{{total}}",
