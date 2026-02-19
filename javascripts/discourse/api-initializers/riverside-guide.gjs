@@ -1,7 +1,6 @@
 import { apiInitializer } from "discourse/lib/api";
 import DiscourseURL from "discourse/lib/url";
 import I18n from "I18n";
-import { themePrefix } from "discourse/lib/theme-settings-store";
 // === Embedded Driver.js bundle (source: dist/driver.js.iife.js) ===
 const __driverGlobal = typeof window !== "undefined" ? window : globalThis;
 if (!__driverGlobal.driver || !__driverGlobal.driver.js) {
