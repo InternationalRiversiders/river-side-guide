@@ -1,4 +1,7 @@
 {
   "name": "Riverside Guide",
-  "component": true
+  "component": true,
+  "about_url": "https://github.com/InternationalRiversiders/river-side-guide/blob/main/README.md",
+  "authors": "Jackzhang144",
+  "theme_version": "0.1.0"
 }
