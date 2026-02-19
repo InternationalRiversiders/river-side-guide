@@ -1,2 +1,18 @@
-/.idea/
-riverside_guide.iml
+# IDE (JetBrains)
+.idea/
+*.iml
+
+# macOS
+.DS_Store
+
+# Local environment
+.env
+.env.*
+
+# Logs and temp files
+*.log
+*.tmp
+*.swp
+
+# Build output
+dist/
