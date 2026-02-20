@@ -614,20 +614,22 @@ export default apiInitializer((api) => {
     }
 
     pendingTopicTourStarted = true;
-    sessionStorage.removeItem(TOUR_PENDING_KEY);
-    console.log("[Tour] Pending check: consumed pending flag, wait for #topic-title.");
+    try {
+      console.log("[Tour] Pending check: wait for #topic-title.");
+      const target = await waitForElement("#topic-title");
+      if (!target) {
+        console.warn("[Tour] Pending check: #topic-title not found, keep pending flag.");
+        return;
+      }
 
-    const target = await waitForElement("#topic-title");
-    if (!target) {
-      console.warn("[Tour] Pending check: #topic-title not found, abort.");
+      console.log("[Tour] Pending check: #topic-title found, startTour().");
+      startTour();
+      sessionStorage.removeItem(TOUR_PENDING_KEY);
+      console.log("[Tour] Pending check: consumed pending flag after start.");
+    } finally {
+      // 允许后续再次触发（只要 pending key 重新写入）
       pendingTopicTourStarted = false;
-      return;
     }
-
-    console.log("[Tour] Pending check: #topic-title found, startTour().");
-    startTour();
-    // 允许后续再次触发（只要 pending key 重新写入）
-    pendingTopicTourStarted = false;
   }
 
   console.log("[Tour] Component loaded.");
