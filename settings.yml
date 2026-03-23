@@ -12,3 +12,139 @@ certification_tutorial_topic_id:
 verified_group_name:
   type: string
   default: ""
+
+# 首页引导步骤配置
+home_tour_steps:
+  type: objects
+  default: []
+  schema:
+    name: home_step
+    properties:
+      title_key:
+        type: string
+        required: true
+        description: "i18n key，如 tour.home.welcome.title"
+      description_key:
+        type: string
+        required: true
+        description: "i18n key，如 tour.home.welcome.description"
+      element:
+        type: string
+        description: "CSS 选择器，留空为全屏高亮"
+      device:
+        type: enum
+        choices:
+          - both
+          - desktop
+          - mobile
+        default: both
+      on_highlighted:
+        type: enum
+        choices:
+          - none
+          - auto_open_hamburger
+          - auto_open_user_menu
+          - auto_close_menu
+        default: none
+      buttons:
+        type: list
+        description: "显示的按钮，如 next,previous,close"
+        default: "next,previous,close"
+
+# 帖子页引导步骤配置
+topic_tour_steps:
+  type: objects
+  default: []
+  schema:
+    name: topic_step
+    properties:
+      title_key:
+        type: string
+        required: true
+        description: "i18n key"
+      description_key:
+        type: string
+        required: true
+        description: "i18n key"
+      element:
+        type: string
+        description: "CSS 选择器，留空为全屏高亮"
+      device:
+        type: enum
+        choices:
+          - both
+          - desktop
+          - mobile
+        default: both
+      on_highlighted:
+        type: enum
+        choices:
+          - none
+          - auto_open_user_menu
+          - auto_close_menu
+        default: none
+      on_next:
+        type: enum
+        choices:
+          - none
+          - navigate_to_cert
+        default: none
+      buttons:
+        type: list
+        description: "显示的按钮"
+        default: "next,previous,close"
+
+# 条件步骤配置（根据条件动态插入步骤组）
+conditional_steps:
+  type: objects
+  default: []
+  schema:
+    name: conditional_step
+    properties:
+      condition:
+        type: enum
+        choices:
+          - user_not_in_group
+          - user_in_group
+          - always
+        default: always
+      group_name:
+        type: string
+        description: "用户组名称，用于 condition 为 user_not_in_group 或 user_in_group 时"
+      steps:
+        type: objects
+        default: []
+        schema:
+          name: conditional_sub_step
+          properties:
+            title_key:
+              type: string
+              required: true
+            description_key:
+              type: string
+              required: true
+            element:
+              type: string
+            device:
+              type: enum
+              choices:
+                - both
+                - desktop
+                - mobile
+              default: both
+            on_highlighted:
+              type: enum
+              choices:
+                - none
+                - auto_open_user_menu
+                - auto_close_menu
+              default: none
+            on_next:
+              type: enum
+              choices:
+                - none
+                - navigate_to_cert
+              default: none
+            buttons:
+              type: list
+              default: "next,previous,close"

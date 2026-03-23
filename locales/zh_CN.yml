@@ -15,7 +15,7 @@ zh_CN:
     home:
       welcome:
         title: "欢迎来到 riverside"
-        description: "本论坛的风格与你熟悉的“清水河畔”有着完全不同的界面风格与使用逻辑。本教程将带你快速熟悉<b>首页</b>的核心功能。"
+        description: "本论坛的风格与你熟悉的"清水河畔"有着完全不同的界面风格与使用逻辑。本教程将带你快速熟悉<b>首页</b>的核心功能。"
       create_topic:
         title: "发帖"
         description: "点击这里发布新话题。"
@@ -48,7 +48,7 @@ zh_CN:
         description: "点击这里按版块筛选话题。"
       tag_filter:
         title: "按标签筛选"
-        description: "通过标签快速过滤出你感兴趣的特定内容。<br><span style='color:#E45735; font-weight:bold;'>选择“精华”标签，即可筛选出所有“精华”内容！</span>"
+        description: "通过标签快速过滤出你感兴趣的特定内容。<br><span style='color:#E45735; font-weight:bold;'>选择"精华"标签，即可筛选出所有"精华"内容！</span>"
       topic_title:
         title: "话题标题"
         description: "这是话题标题。点击<b>标题</b>以及周边空白区域即可进入详情页浏览帖子内容。"
@@ -63,7 +63,7 @@ zh_CN:
         description: "这里会显示你的聊天通知。点击可以快速打开聊天弹窗或全屏聊天窗口。"
       user_center:
         title: "个人中心"
-        description: "点击这里可以查看通知、私信和书签。<br><br><b style='color:#E45735;'>点击“下一步”，我们将自动为您打开菜单并介绍详细功能。</b>"
+        description: "点击这里可以查看通知、私信和书签。<br><br><b style='color:#E45735;'>点击"下一步"，我们将自动为您打开菜单并介绍详细功能。</b>"
       menu_all_notifications:
         title: "所有通知"
         description: "这是您的<b style='color:#e67e22;'>消息总览</b>。<br>收到的点赞、被引用、系统通知都会汇总在这里。"
@@ -106,5 +106,39 @@ zh_CN:
         description: "点击上方标题，即可跳转至帖子开头"
       certification:
         title: "你还没有完成校友认证"
-        description: "认证成为校友之后才能体验完整论坛内容，点击下方按钮跳转至“校友认证教程”。"
+        description: "认证成为校友之后才能体验完整论坛内容，点击下方按钮跳转至"校友认证教程"。"
         next_btn: "跳转认证教程"
+  theme_settings:
+    schema:
+      descriptions:
+        home_tour_target_topic_id: "首页引导完成后跳转的目标帖子 ID"
+        certification_tutorial_topic_id: "校友认证教程帖子 ID，<=0 表示未配置"
+        verified_group_name: "已认证用户组名称，留空则始终显示认证提示"
+        home_tour_steps:
+          label: "首页引导步骤"
+          description: "配置首页引导的各个步骤"
+          properties:
+            title_key: "标题 i18n key"
+            description_key: "描述 i18n key"
+            element: "CSS 选择器，为空则全屏高亮"
+            device: "设备类型：both=全部，desktop=仅桌面，mobile=仅移动"
+            on_highlighted: "高亮时的回调动作"
+            buttons: "显示的按钮，逗号分隔"
+        topic_tour_steps:
+          label: "帖子页引导步骤"
+          description: "配置帖子页引导的各个步骤"
+          properties:
+            title_key: "标题 i18n key"
+            description_key: "描述 i18n key"
+            element: "CSS 选择器，为空则全屏高亮"
+            device: "设备类型"
+            on_highlighted: "高亮时的回调动作"
+            on_next: "点击下一步时的动作"
+            buttons: "显示的按钮"
+        conditional_steps:
+          label: "条件步骤"
+          description: "根据条件动态插入的步骤组"
+          properties:
+            condition: "条件类型：user_not_in_group=用户不在组，user_in_group=用户在组，always=始终"
+            group_name: "用户组名称"
+            steps: "步骤列表"

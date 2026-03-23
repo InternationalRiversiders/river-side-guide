@@ -88,323 +88,427 @@ export default apiInitializer((api) => {
   }
 
   // =================================================================
-  // 引导配置 (TOUR CONFIGURATION)
+  // CALLBACKS 库
   // =================================================================
-  const HOME_TOUR_CONFIG = {
-    steps: [
-      // device：0=仅桌面端，1=仅移动端；不填=通用
-      {
-        popover: {
-          title: t("tour.home.welcome.title"),
-          description: t("tour.home.welcome.description"),
-        },
-      },
-      {
-        device: 0,
-        element: "#create-topic",
-        popover: {
-          title: t("tour.home.create_topic.title"),
-          description: t("tour.home.create_topic.description"),
-        },
-      },
-      {
-        device: 1,
-        element: "#toggle-hamburger-menu",
-        popover: {
-          title: t("tour.home.mobile_nav.title"),
-          description: t("tour.home.mobile_nav.description"),
-        },
-        onHighlighted: (element) => {
-          const target = element || document.querySelector("#toggle-hamburger-menu");
-          if (target) {
-            target.dispatchEvent(
-              new MouseEvent("click", {
-                bubbles: true,
-                cancelable: true,
-                view: window,
-              })
-            );
-          }
-        },
-      },
-      {
-        element: '[data-section-name="community"]',
-        popover: {
-          title: t("tour.home.community.title"),
-          description: t("tour.home.community.description"),
-        },
-      },
-      {
-        element: '[data-section-name="categories"]',
-        popover: {
-          title: t("tour.home.categories.title"),
-          description: t("tour.home.categories.description"),
-        },
-      },
-      {
-        element: '[data-section-name="chat-channels"]',
-        popover: {
-          title: t("tour.home.chat_channels.title"),
-          description: t("tour.home.chat_channels.description"),
-        },
-      },
-      {
-        device: 1,
-        element: "#search-button",
-        popover: {
-          title: t("tour.home.mobile_search.title"),
-          description: t("tour.home.mobile_search.description"),
-        },
-        onHighlighted: () => {
-          const toggle = document.querySelector("#toggle-hamburger-menu");
-          if (toggle) {
-            toggle.dispatchEvent(
-              new MouseEvent("click", {
-                bubbles: true,
-                cancelable: true,
-                view: window,
-              })
-            );
-          }
-        },
-      },
-      {
-        device: 0,
-        element: "#welcome-banner-search-input",
-        popover: {
-          title: t("tour.home.desktop_search.title"),
-          description: t("tour.home.desktop_search.description"),
-        },
-        onHighlighted: () => {
-          const toggle = document.querySelector("#toggle-hamburger-menu");
-          if (toggle) {
-            toggle.dispatchEvent(
-              new MouseEvent("click", {
-                bubbles: true,
-                cancelable: true,
-                view: window,
-              })
-            );
-          }
-        },
-      },
-      {
-        device: 0,
-        element: ".show-advanced-search",
-        popover: {
-          title: t("tour.home.advanced_search.title"),
-          description: t("tour.home.advanced_search.description"),
-        },
-      },
-      {
-        device: 0,
-        element: "#navigation-bar",
-        popover: {
-          title: t("tour.home.sorting.title"),
-          description: t("tour.home.sorting.description"),
-        },
-      },
-      {
-        device: 0,
-        element: ".category-drop",
-        popover: {
-          title: t("tour.home.category_filter.title"),
-          description: t("tour.home.category_filter.description"),
-        },
-      },
-      {
-        device: 0,
-        element: ".tag-drop",
-        popover: {
-          title: t("tour.home.tag_filter.title"),
-          description: t("tour.home.tag_filter.description"),
-        },
-      },
-      {
-        element: ".topic-list-item .title",
-        popover: {
-          title: t("tour.home.topic_title.title"),
-          description: t("tour.home.topic_title.description"),
-        },
-      },
-      {
-        element: ".topic-replies",
-        popover: {
-          title: t("tour.home.replies.title"),
-          description: t("tour.home.replies.description"),
-        },
-      },
-      {
-        element: ".topic-list-item .topic-activity-data",
-        popover: {
-          title: t("tour.home.last_replier.title"),
-          description: t("tour.home.last_replier.description"),
-        },
-      },
-      {
-        element: ".chat-header-icon",
-        popover: {
-          title: t("tour.home.chat_notifications.title"),
-          description: t("tour.home.chat_notifications.description"),
-        },
-      },
-      {
-        element: "#current-user",
-        popover: {
-          title: t("tour.home.user_center.title"),
-          description: t("tour.home.user_center.description"),
-        },
-        onHighlighted: (element) => {
-          const target =
-            element &&
-            (element.querySelector("button, a, .header-dropdown-toggle") ||
-              element);
-          if (target) {
-            target.dispatchEvent(
-              new MouseEvent("click", {
-                bubbles: true,
-                cancelable: true,
-                view: window,
-              })
-            );
-          }
-        },
-      },
-      {
-        element: "#user-menu-button-all-notifications",
-        popover: {
-          title: t("tour.home.menu_all_notifications.title"),
-          description: t("tour.home.menu_all_notifications.description"),
-        },
-      },
-      {
-        element: "#user-menu-button-replies",
-        popover: {
-          title: t("tour.home.menu_replies.title"),
-          description: t("tour.home.menu_replies.description"),
-        },
-      },
-      {
-        element: "#user-menu-button-messages",
-        popover: {
-          title: t("tour.home.menu_messages.title"),
-          description: t("tour.home.menu_messages.description"),
-        },
-      },
-      {
-        element: "#user-menu-button-bookmarks",
-        popover: {
-          title: t("tour.home.menu_bookmarks.title"),
-          description: t("tour.home.menu_bookmarks.description"),
-        },
-      },
-      {
-        element: "#user-menu-button-chat-notifications",
-        popover: {
-          title: t("tour.home.menu_chat_notifications.title"),
-          description: t("tour.home.menu_chat_notifications.description"),
-        },
-      },
-      {
-        element: "#user-menu-button-other-notifications",
-        popover: {
-          title: t("tour.home.menu_other_notifications.title"),
-          description: t("tour.home.menu_other_notifications.description"),
-        },
-      },
-      {
-        element: "#user-menu-button-profile",
-        popover: {
-          title: t("tour.home.menu_profile.title"),
-          description: t("tour.home.menu_profile.description"),
-        },
-      },
-      {
-        popover: {
-          title: t("tour.home.complete.title"),
-          description: t("tour.home.complete.description"),
-        },
-        onHighlighted: () => {
-          const container = document.querySelector("#current-user");
-          if (!container) return;
-          const target =
-            container.querySelector("button, a, .header-dropdown-toggle") ||
-            container;
-          target.dispatchEvent(
-            new MouseEvent("click", {
-              bubbles: true,
-              cancelable: true,
-              view: window,
-            })
-          );
-        },
-      },
-    ],
+  const CALLBACKS = {
+    none: null,
+
+    // 移动端打开 hamburger 菜单
+    auto_open_hamburger: (element) => {
+      const target = element || document.querySelector("#toggle-hamburger-menu");
+      if (target) {
+        target.dispatchEvent(
+          new MouseEvent("click", {
+            bubbles: true,
+            cancelable: true,
+            view: window,
+          })
+        );
+      }
+    },
+
+    // 打开用户菜单
+    auto_open_user_menu: (element) => {
+      const target =
+        element &&
+        (element.querySelector("button, a, .header-dropdown-toggle") || element);
+      if (target) {
+        target.dispatchEvent(
+          new MouseEvent("click", {
+            bubbles: true,
+            cancelable: true,
+            view: window,
+          })
+        );
+      }
+    },
+
+    // 点击空白关闭菜单
+    auto_close_menu: () => {
+      document.body.click();
+    },
+
+    // 首页最后一步：跳转帖子页
+    finish_home_tour: (element, step, { driver }) => {
+      sessionStorage.setItem("riverside_guide_pending_tour", "topic");
+      driver.destroy();
+      DiscourseURL.routeTo(`/t/${TOPIC_TARGET_ID}`);
+    },
+
+    // 跳转到认证教程
+    navigate_to_cert: (element, step, { driver }) => {
+      const path = getCertificationTutorialPath();
+      if (!path) {
+        console.warn("[Tour] 认证教程主题 ID 未配置。");
+        return;
+      }
+      driver?.destroy?.();
+      DiscourseURL.routeTo(path);
+    },
   };
 
-  const baseTopicTourSteps = [
-      {
-        popover: {
-          title: t("tour.topic.welcome.title"),
-          description: t("tour.topic.welcome.description"),
-        },
-      },
-      {
-        element: "#topic-title",
-        popover: {
-          title: t("tour.topic.topic_title.title"),
-          description: t("tour.topic.topic_title.description"),
-        },
-      },
-      {
-        device: 0,
-        element: ".timeline-scrollarea-wrapper",
-        popover: {
-          title: t("tour.topic.timeline.title"),
-          description: t("tour.topic.timeline.description"),
-        },
-      },
-      {
-        element: "#topic-footer-buttons",
-        popover: {
-          title: t("tour.topic.actions.title"),
-          description: t("tour.topic.actions.description"),
-        },
-      },
-      {
-        element: ".topic-link",
-        popover: {
-          title: t("tour.topic.back_to_top.title"),
-          description: t("tour.topic.back_to_top.description"),
-        },
-      },
-    ];
+  // =================================================================
+  // 步骤构建器
+  // =================================================================
 
-  function buildTopicTourSteps() {
-    const steps = [...baseTopicTourSteps];
+  /**
+   * 将 settings 中的步骤对象转换为 Driver.js 格式
+   */
+  function buildStepsFromSettings(settingsSteps, extraCallbacks = {}) {
+    if (!Array.isArray(settingsSteps)) {
+      return [];
+    }
+
+    return settingsSteps
+      .filter((step) => step && step.title_key && step.description_key)
+      .map((step) => {
+        // 解析 device: "both"=undefined, "desktop"=0, "mobile"=1
+        let device;
+        if (step.device === "desktop") {
+          device = 0;
+        } else if (step.device === "mobile") {
+          device = 1;
+        }
+
+        // 解析 buttons：支持字符串（如 "next,previous,close"）或数组
+        let showButtons = ["next", "previous", "close"];
+        if (step.buttons) {
+          if (typeof step.buttons === "string") {
+            showButtons = step.buttons
+              .split(",")
+              .map((b) => b.trim())
+              .filter(Boolean);
+          } else if (Array.isArray(step.buttons)) {
+            showButtons = step.buttons;
+          }
+        }
+
+        // 合并回调：extraCallbacks 优先级高于 CALLBACKS
+        const mergedCallbacks = { ...CALLBACKS, ...extraCallbacks };
+        const onHighlightedCb = mergedCallbacks[step.on_highlighted] || null;
+        const onNextCb = mergedCallbacks[step.on_next] || null;
+
+        return {
+          device,
+          element: step.element || null,
+          popover: {
+            title: t(step.title_key),
+            description: t(step.description_key),
+            showButtons,
+            onHighlighted: onHighlightedCb,
+            onNextClick: onNextCb,
+          },
+        };
+      });
+  }
+
+  /**
+   * 根据条件构建完整的帖子页引导步骤
+   */
+  function buildTopicTourStepsFromSettings() {
     const groupNames = getCurrentUserGroupNames();
     window.riversideGuideUserGroups = groupNames;
 
-    if (shouldShowCertificationStep(groupNames)) {
-      steps.push({
-        popover: {
-          title: t("tour.topic.certification.title"),
-          description: t("tour.topic.certification.description"),
-          showButtons: ["next"],
-          nextBtnText: t("tour.topic.certification.next_btn"),
-          onNextClick: (_el, _step, { driver }) => {
-            const path = getCertificationTutorialPath();
-            if (!path) {
-              console.warn("[Tour] 认证教程主题 ID 未配置。");
-              return;
-            }
-            driver?.destroy?.();
-            DiscourseURL.routeTo(path);
+    let steps = buildStepsFromSettings(settings.topic_tour_steps);
+
+    // 处理条件步骤
+    const conditionalSteps = settings.conditional_steps || [];
+    conditionalSteps.forEach((cs) => {
+      if (!cs.condition || !cs.steps) return;
+
+      let shouldInclude = false;
+      if (cs.condition === "always") {
+        shouldInclude = true;
+      } else if (cs.condition === "user_not_in_group") {
+        shouldInclude = !groupNames.includes(cs.group_name);
+      } else if (cs.condition === "user_in_group") {
+        shouldInclude = groupNames.includes(cs.group_name);
+      }
+
+      if (shouldInclude) {
+        const subSteps = buildStepsFromSettings(cs.steps);
+        steps = steps.concat(subSteps);
+      }
+    });
+
+    return steps;
+  }
+
+  // =================================================================
+  // 默认引导配置（当 settings 未配置时使用）
+  // =================================================================
+  const DEFAULT_HOME_TOUR_STEPS = [
+    {
+      popover: {
+        title: t("tour.home.welcome.title"),
+        description: t("tour.home.welcome.description"),
+      },
+    },
+    {
+      device: 0,
+      element: "#create-topic",
+      popover: {
+        title: t("tour.home.create_topic.title"),
+        description: t("tour.home.create_topic.description"),
+      },
+    },
+    {
+      device: 1,
+      element: "#toggle-hamburger-menu",
+      popover: {
+        title: t("tour.home.mobile_nav.title"),
+        description: t("tour.home.mobile_nav.description"),
+      },
+      onHighlighted: CALLBACKS.auto_open_hamburger,
+    },
+    {
+      element: '[data-section-name="community"]',
+      popover: {
+        title: t("tour.home.community.title"),
+        description: t("tour.home.community.description"),
+      },
+    },
+    {
+      element: '[data-section-name="categories"]',
+      popover: {
+        title: t("tour.home.categories.title"),
+        description: t("tour.home.categories.description"),
+      },
+    },
+    {
+      element: '[data-section-name="chat-channels"]',
+      popover: {
+        title: t("tour.home.chat_channels.title"),
+        description: t("tour.home.chat_channels.description"),
+      },
+    },
+    {
+      device: 1,
+      element: "#search-button",
+      popover: {
+        title: t("tour.home.mobile_search.title"),
+        description: t("tour.home.mobile_search.description"),
+      },
+      onHighlighted: CALLBACKS.auto_open_hamburger,
+    },
+    {
+      device: 0,
+      element: "#welcome-banner-search-input",
+      popover: {
+        title: t("tour.home.desktop_search.title"),
+        description: t("tour.home.desktop_search.description"),
+      },
+      onHighlighted: CALLBACKS.auto_open_hamburger,
+    },
+    {
+      device: 0,
+      element: ".show-advanced-search",
+      popover: {
+        title: t("tour.home.advanced_search.title"),
+        description: t("tour.home.advanced_search.description"),
+      },
+    },
+    {
+      device: 0,
+      element: "#navigation-bar",
+      popover: {
+        title: t("tour.home.sorting.title"),
+        description: t("tour.home.sorting.description"),
+      },
+    },
+    {
+      device: 0,
+      element: ".category-drop",
+      popover: {
+        title: t("tour.home.category_filter.title"),
+        description: t("tour.home.category_filter.description"),
+      },
+    },
+    {
+      device: 0,
+      element: ".tag-drop",
+      popover: {
+        title: t("tour.home.tag_filter.title"),
+        description: t("tour.home.tag_filter.description"),
+      },
+    },
+    {
+      element: ".topic-list-item .title",
+      popover: {
+        title: t("tour.home.topic_title.title"),
+        description: t("tour.home.topic_title.description"),
+      },
+    },
+    {
+      element: ".topic-replies",
+      popover: {
+        title: t("tour.home.replies.title"),
+        description: t("tour.home.replies.description"),
+      },
+    },
+    {
+      element: ".topic-list-item .topic-activity-data",
+      popover: {
+        title: t("tour.home.last_replier.title"),
+        description: t("tour.home.last_replier.description"),
+      },
+    },
+    {
+      element: ".chat-header-icon",
+      popover: {
+        title: t("tour.home.chat_notifications.title"),
+        description: t("tour.home.chat_notifications.description"),
+      },
+    },
+    {
+      element: "#current-user",
+      popover: {
+        title: t("tour.home.user_center.title"),
+        description: t("tour.home.user_center.description"),
+      },
+      onHighlighted: CALLBACKS.auto_open_user_menu,
+    },
+    {
+      element: "#user-menu-button-all-notifications",
+      popover: {
+        title: t("tour.home.menu_all_notifications.title"),
+        description: t("tour.home.menu_all_notifications.description"),
+      },
+    },
+    {
+      element: "#user-menu-button-replies",
+      popover: {
+        title: t("tour.home.menu_replies.title"),
+        description: t("tour.home.menu_replies.description"),
+      },
+    },
+    {
+      element: "#user-menu-button-messages",
+      popover: {
+        title: t("tour.home.menu_messages.title"),
+        description: t("tour.home.menu_messages.description"),
+      },
+    },
+    {
+      element: "#user-menu-button-bookmarks",
+      popover: {
+        title: t("tour.home.menu_bookmarks.title"),
+        description: t("tour.home.menu_bookmarks.description"),
+      },
+    },
+    {
+      element: "#user-menu-button-chat-notifications",
+      popover: {
+        title: t("tour.home.menu_chat_notifications.title"),
+        description: t("tour.home.menu_chat_notifications.description"),
+      },
+    },
+    {
+      element: "#user-menu-button-other-notifications",
+      popover: {
+        title: t("tour.home.menu_other_notifications.title"),
+        description: t("tour.home.menu_other_notifications.description"),
+      },
+    },
+    {
+      element: "#user-menu-button-profile",
+      popover: {
+        title: t("tour.home.menu_profile.title"),
+        description: t("tour.home.menu_profile.description"),
+      },
+    },
+    {
+      popover: {
+        title: t("tour.home.complete.title"),
+        description: t("tour.home.complete.description"),
+      },
+      onHighlighted: CALLBACKS.auto_open_user_menu,
+    },
+  ];
+
+  const DEFAULT_TOPIC_TOUR_STEPS = [
+    {
+      popover: {
+        title: t("tour.topic.welcome.title"),
+        description: t("tour.topic.welcome.description"),
+      },
+    },
+    {
+      element: "#topic-title",
+      popover: {
+        title: t("tour.topic.topic_title.title"),
+        description: t("tour.topic.topic_title.description"),
+      },
+    },
+    {
+      device: 0,
+      element: ".timeline-scrollarea-wrapper",
+      popover: {
+        title: t("tour.topic.timeline.title"),
+        description: t("tour.topic.timeline.description"),
+      },
+    },
+    {
+      element: "#topic-footer-buttons",
+      popover: {
+        title: t("tour.topic.actions.title"),
+        description: t("tour.topic.actions.description"),
+      },
+    },
+    {
+      element: ".topic-link",
+      popover: {
+        title: t("tour.topic.back_to_top.title"),
+        description: t("tour.topic.back_to_top.description"),
+      },
+    },
+  ];
+
+  const DEFAULT_CONDITIONAL_TOPIC_STEPS = [
+    {
+      condition: "user_not_in_group",
+      group_name: "",
+      steps: [
+        {
+          popover: {
+            title: t("tour.topic.certification.title"),
+            description: t("tour.topic.certification.description"),
+            showButtons: ["next"],
+            nextBtnText: t("tour.topic.certification.next_btn"),
+            onNextClick: CALLBACKS.navigate_to_cert,
           },
         },
-      });
+      ],
+    },
+  ];
+
+  // =================================================================
+  // 引导配置
+  // =================================================================
+  const HOME_TOUR_CONFIG = {
+    getSteps: () => {
+      const configuredSteps = buildStepsFromSettings(settings.home_tour_steps);
+      return configuredSteps.length > 0 ? configuredSteps : DEFAULT_HOME_TOUR_STEPS;
+    },
+  };
+
+  function buildTopicTourSteps() {
+    const configuredSteps = buildTopicTourStepsFromSettings();
+    if (configuredSteps.length > 0) {
+      return configuredSteps;
     }
 
+    // fallback: 使用默认步骤 + 条件认证步骤
+    const groupNames = getCurrentUserGroupNames();
+    window.riversideGuideUserGroups = groupNames;
+
+    // 动态设置默认条件步骤的 group_name
+    DEFAULT_CONDITIONAL_TOPIC_STEPS[0].group_name = VERIFIED_GROUP_NAME;
+
+    let steps = [...DEFAULT_TOPIC_TOUR_STEPS];
+    if (shouldShowCertificationStep(groupNames)) {
+      steps = steps.concat(DEFAULT_CONDITIONAL_TOPIC_STEPS[0].steps);
+    }
     return steps;
   }
 
