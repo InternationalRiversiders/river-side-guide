@@ -8,18 +8,31 @@ Riverside Guide 是一个 Discourse Theme Component（主题组件），使用 D
 
 ## Key Architecture
 
-- **入口点**: `javascripts/discourse/api-initializers/riverside-guide.gjs` - 核心引导逻辑，包含嵌入式 Driver.js 代码
-- **样式**: `common/common.scss` - 包含嵌入式 driver.css 和自定义按钮/弹窗样式
-- **UI**: `common/footer.html` - 悬浮按钮 HTML
-- **配置**: `settings.yml` - 主题组件设置项（目标帖子ID、认证教程ID、用户组名）
-- **国际化**: `locales/zh_CN.yml` 和 `locales/en.yml` - 引导文案
+| 文件 | 用途 |
+|------|------|
+| `javascripts/discourse/api-initializers/riverside-guide.gjs` | 核心入口，包含嵌入式 Driver.js 代码和引导逻辑 |
+| `common/common.scss` | 样式文件，含嵌入式 driver.css 和自定义按钮/弹窗样式 |
+| `common/footer.html` | 悬浮按钮 HTML |
+| `common/head_tag.html` | 头部标签（内联 Driver.js IIFE 脚本） |
+| `settings.yml` | 主题组件设置项 |
+| `locales/zh_CN.yml` / `locales/en.yml` | 引导文案国际化 |
+| `dist/` | Driver.js 官方构建输出（升级版本时使用） |
+
+## Settings 配置
+
+| 字段 | 类型 | 说明 |
+|------|------|------|
+| `home_tour_target_topic_id` | integer | 首页引导完成后跳转的目标帖子 ID |
+| `certification_tutorial_topic_id` | integer | 校友认证教程帖子 ID（<=0 视为未配置） |
+| `verified_group_name` | string | 已完成认证的用户组名称（留空则始终显示认证提示步骤） |
 
 ## Core Concepts
 
 - **Two tour configs**: `HOME_TOUR_CONFIG`（首页）和 `TOPIC_TOUR_CONFIG`（帖子页）
 - **Device filter**: `device: 0` = 仅桌面端，`device: 1` = 仅移动端，不填 = 通用
-- **Cross-page flow**: 首页引导完成后通过 `sessionStorage` 存储 pending 状态，跳转到目标帖子页后自动继续引导
-- **Embedded Driver.js**: Driver.js 脚本和样式以内嵌方式集成，无需外部 CDN
+- **Mobile breakpoint**: `window.innerWidth <= 600` 判断移动端
+- **Cross-page flow**: 首页引导完成后通过 `sessionStorage["riverside_guide_pending_tour"]` 存储 pending 状态，跳转帖子页后自动继续引导
+- **Embedded Driver.js**: Driver.js 的 JS（IIFE）和 CSS 都以内嵌方式集成在 `common/head_tag.html` 和 `common/common.scss` 中
 
 ## Development Commands
 
@@ -29,8 +42,8 @@ This is a Discourse theme component - no build system, no tests, no linting. Dev
 
 To update Driver.js version:
 1. Download new build from Driver.js repository
-2. Copy `driver.js.iife.js` content to the embedded section in `riverside-guide.gjs`
-3. Copy `driver.css` content to the embedded section in `common/common.scss`
+2. Copy `driver.js.iife.js` content to `common/head_tag.html`（保留 `__driverGlobal` 包装检查）
+3. Copy `driver.css` content to `common/common.scss` 顶部嵌入式注释块内
 
 ## Key Patterns
 
@@ -38,13 +51,14 @@ To update Driver.js version:
 - **Translation keys**: Defined in `locales/zh_CN.yml` with prefix like `tour.home.welcome.title`
 - **Element detection**: Use `requestAnimationFrame` or `waitForElement` helper for async rendering
 - **Routing**: Use `DiscourseURL.routeTo(path)` for navigation
-- **Settings access**: Use `settings.setting_name` (only available at runtime in Discourse)
+- **Settings access**: Use `settings.setting_name`（仅在 Discourse 运行时可用）
+- **Page detection**: Check `window.location.pathname === "/"` for home page
 
 ## Testing
 
 Manual verification required:
 1. Enable the component in Discourse admin
 2. Visit homepage and click "新手教程" button
-3. Verify step flow on desktop and mobile (<= 600px)
+3. Verify step flow on desktop and mobile (`<= 600px`)
 4. Confirm home tour completion routes to topic and triggers topic tour
 5. Ensure button only appears on `/`
