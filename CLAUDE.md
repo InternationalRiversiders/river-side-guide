@@ -13,7 +13,7 @@ Riverside Guide 是一个 Discourse Theme Component（主题组件），使用 D
 | `javascripts/discourse/api-initializers/riverside-guide.gjs` | 核心入口，包含嵌入式 Driver.js 代码和引导逻辑 |
 | `common/common.scss` | 样式文件，含嵌入式 driver.css 和自定义按钮/弹窗样式 |
 | `common/footer.html` | 悬浮按钮 HTML |
-| `common/head_tag.html` | 头部标签（内联 Driver.js IIFE 脚本） |
+| `common/head_tag.html` | 头部标签（Driver.js 已迁移至 GJS 文件，此处仅保留注释） |
 | `settings.yml` | 主题组件设置项 |
 | `locales/zh_CN.yml` / `locales/en.yml` | 引导文案国际化 |
 | `dist/` | Driver.js 官方构建输出（升级版本时使用） |
@@ -24,7 +24,7 @@ Riverside Guide 是一个 Discourse Theme Component（主题组件），使用 D
 |------|------|------|
 | `home_tour_target_topic_id` | integer | 首页引导完成后跳转的目标帖子 ID |
 | `certification_tutorial_topic_id` | integer | 校友认证教程帖子 ID（<=0 视为未配置） |
-| `verified_group_name` | string | 已完成认证的用户组名称（留空则始终显示认证提示步骤） |
+| `verified_groups` | groups | 已完成认证的用户组（多选；留空则始终显示认证提示步骤） |
 
 ## Core Concepts
 
@@ -32,7 +32,7 @@ Riverside Guide 是一个 Discourse Theme Component（主题组件），使用 D
 - **Device filter**: `device: 0` = 仅桌面端，`device: 1` = 仅移动端，不填 = 通用
 - **Mobile breakpoint**: `window.innerWidth <= 600` 判断移动端
 - **Cross-page flow**: 首页引导完成后通过 `sessionStorage["riverside_guide_pending_tour"]` 存储 pending 状态，跳转帖子页后自动继续引导
-- **Embedded Driver.js**: Driver.js 的 JS（IIFE）和 CSS 都以内嵌方式集成在 `common/head_tag.html` 和 `common/common.scss` 中
+- **Embedded Driver.js**: Driver.js 的 JS（IIFE）内嵌在 `riverside-guide.gjs` 中（以 `__driverGlobal` 包装），CSS 内嵌在 `common/common.scss` 顶部
 
 ## Development Commands
 
@@ -41,9 +41,9 @@ This is a Discourse theme component - no build system, no tests, no linting. Dev
 2. Uploading/installing the component in a Discourse instance for testing
 
 To update Driver.js version:
-1. Download new build from Driver.js repository
-2. Copy `driver.js.iife.js` content to `common/head_tag.html`（保留 `__driverGlobal` 包装检查）
-3. Copy `driver.css` content to `common/common.scss` 顶部嵌入式注释块内
+1. 下载新版 Driver.js 构建产物到 `dist/` 目录
+2. 从 `dist/driver.js.iife.js` 提取函数体（去掉 `this.driver=this.driver||{};this.driver.js=` 前缀和 `({});` 后缀），替换 `riverside-guide.gjs` 中 `__driverGlobal.driver.js = ` 之后的旧函数体（保留 `__driverGlobal` 包装检查）
+3. 从 `dist/driver.css` 对比 `common/common.scss` 顶部嵌入式 CSS；如有变化则替换
 
 ## Key Patterns
 

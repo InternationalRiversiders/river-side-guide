@@ -38,8 +38,10 @@ export default apiInitializer((api) => {
     themeSettings.certification_tutorial_topic_id,
     5
   );
-  // 已认证用户组名；留空则始终显示提示
-  const VERIFIED_GROUP_NAME = (themeSettings.verified_group_name || "").trim();
+  // 已认证用户组列表（type: groups 返回组名字符串数组）；空数组则始终显示提示
+  const VERIFIED_GROUPS = Array.isArray(themeSettings.verified_groups)
+    ? themeSettings.verified_groups
+    : [];
 
   // 获取当前用户所属的用户组名称列表（字符串数组）
   function getCurrentUserGroupNames() {
@@ -83,8 +85,8 @@ export default apiInitializer((api) => {
   }
 
   function shouldShowCertificationStep(groupNames) {
-    if (!VERIFIED_GROUP_NAME) return true;
-    return !groupNames.includes(VERIFIED_GROUP_NAME);
+    if (!VERIFIED_GROUPS || VERIFIED_GROUPS.length === 0) return true;
+    return !VERIFIED_GROUPS.some((g) => groupNames.includes(g));
   }
 
   // =================================================================
@@ -170,12 +172,12 @@ export default apiInitializer((api) => {
           device = 1;
         }
 
-        // 解析 buttons：支持字符串（如 "next,previous,close"）或数组
+        // 解析 buttons：支持 Discourse list 格式（管道符）、逗号分隔字符串或数组
         let showButtons = ["next", "previous", "close"];
         if (step.buttons) {
           if (typeof step.buttons === "string") {
             showButtons = step.buttons
-              .split(",")
+              .split(/[|,]/)  // Discourse list 用 | 分隔，兼容逗号
               .map((b) => b.trim())
               .filter(Boolean);
           } else if (Array.isArray(step.buttons)) {
@@ -191,12 +193,16 @@ export default apiInitializer((api) => {
         return {
           device,
           element: step.element || null,
+          // Driver.js API: onHighlighted / onDeselected / onHighlightStarted 是步骤级钩子
+          onHighlighted: onHighlightedCb || undefined,
           popover: {
             title: t(step.title_key),
             description: t(step.description_key),
+            side: step.side || undefined,
+            align: step.align || undefined,
             showButtons,
-            onHighlighted: onHighlightedCb,
-            onNextClick: onNextCb,
+            // Driver.js API: onNextClick / onPrevClick / onCloseClick 是 Popover 级钩子
+            onNextClick: onNextCb || undefined,
           },
         };
       });
@@ -499,11 +505,10 @@ export default apiInitializer((api) => {
     }
 
     // fallback: 使用默认步骤 + 条件认证步骤
+    // 注意：DEFAULT_CONDITIONAL_TOPIC_STEPS[0].group_name 仅用于 settings 配置路径的匹配；
+    // fallback 路径通过 shouldShowCertificationStep() 判断，无需设置 group_name。
     const groupNames = getCurrentUserGroupNames();
     window.riversideGuideUserGroups = groupNames;
-
-    // 动态设置默认条件步骤的 group_name
-    DEFAULT_CONDITIONAL_TOPIC_STEPS[0].group_name = VERIFIED_GROUP_NAME;
 
     let steps = [...DEFAULT_TOPIC_TOUR_STEPS];
     if (shouldShowCertificationStep(groupNames)) {
@@ -602,7 +607,11 @@ export default apiInitializer((api) => {
         if (!driverObj.hasNextStep() || confirm(t("tour.controls.confirm_exit"))) {
           driverObj.destroy();
         }
-      }
+      },
+      onDestroyed: () => {
+        // 清理引导过程中可能打开的菜单（hamburger / user menu）
+        CALLBACKS.auto_close_menu();
+      },
     });
 
     try {

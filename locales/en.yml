@@ -3,108 +3,146 @@ en:
     description: "Riverside onboarding guide component"
   tour:
     trigger:
-      label: ""
-      title: ""
-      close_title: ""
+      label: "Guide"
+      title: "Click to start the onboarding guide"
+      close_title: "Hide permanently"
     controls:
-      progress: ""
-      next: ""
-      previous: ""
-      done: ""
-      confirm_exit: ""
+      progress: "Step %{current} / %{total}"
+      next: "Next"
+      previous: "Previous"
+      done: "Done"
+      confirm_exit: "You haven't finished the guide yet. Are you sure you want to exit?"
     home:
       welcome:
-        title: ""
-        description: ""
+        title: "Welcome to Riverside"
+        description: "This forum has a completely different interface and usage logic from what you may be used to. This guide will help you quickly get familiar with the <b>homepage</b> features."
       create_topic:
-        title: ""
-        description: ""
+        title: "Create Topic"
+        description: "Click here to create a new topic."
       mobile_nav:
-        title: ""
-        description: ""
+        title: "Navigation Sidebar"
+        description: "Click here to expand the community navigation bar."
       community:
-        title: ""
-        description: ""
+        title: "Community Navigation"
+        description: "Quick access to <b>All Topics</b>, <b>My Messages</b>, <b>My Posts</b>, and more."
       categories:
-        title: ""
-        description: ""
+        title: "Categories"
+        description: "Browse all forum categories. Expand or collapse to jump to sections you're interested in.<br><br><span style='color:#E45735; font-weight:bold;'>Click the button in the top-right corner to customize which categories are shown.</span>"
       chat_channels:
-        title: ""
-        description: ""
+        title: "Public Chat Channels"
+        description: "<div style='margin-bottom:6px;'><b>Alumni Square</b>: Chat with other members in real time.</div><div><b>Second-hand Exchange</b>: Share second-hand items, coupons, and promo codes here.</div>"
       mobile_search:
-        title: ""
-        description: ""
+        title: "Search"
+        description: "Click here to search the entire site."
       desktop_search:
-        title: ""
-        description: ""
+        title: "Quick Search"
+        description: "Enter keywords directly here to search the entire site."
       advanced_search:
-        title: ""
-        description: ""
+        title: "Advanced Search"
+        description: "Click this icon for <b>advanced search</b>. Filter by <b style='color:#0088CC'>category</b>, <b style='color:#0088CC'>topic</b>, <b style='color:#0088CC'>tags</b>, <b style='color:#0088CC'>author</b>, and more."
       sorting:
-        title: ""
-        description: ""
+        title: "Topic Sorting"
+        description: "<div style='margin-bottom:8px;'><b style='color:#25AAE2; font-size:15px;'>Latest</b><br>Sorted by creation time. See the <b>newest topics</b> first.</div><div style='margin-bottom:8px;'><b style='color:#25AAE2; font-size:15px;'>Latest Reply</b><br>Sorted by last reply. See <b>actively discussed topics</b>.</div><div style='margin-bottom:8px;'><b style='color:#25AAE2; font-size:15px;'>Unread / New</b><br>• <b>New</b>: Topics you haven't viewed yet.<br>• <b>Unread</b>: Topics you've viewed but have <b>new replies</b>.</div><div><b style='color:#25AAE2; font-size:15px;'>Top / Hot</b><br>Popular topics based on views and replies.</div>"
       category_filter:
-        title: ""
-        description: ""
+        title: "Filter by Category"
+        description: "Click here to filter topics by category."
       tag_filter:
-        title: ""
-        description: ""
+        title: "Filter by Tags"
+        description: "Quickly filter by specific tags.<br><span style='color:#E45735; font-weight:bold;'>Select the \"Featured\" tag to see all highlighted content!</span>"
       topic_title:
-        title: ""
-        description: ""
+        title: "Topic Title"
+        description: "This is the topic title. Click the <b>title</b> or nearby area to open the topic and read the full discussion."
       replies:
-        title: ""
-        description: ""
+        title: "Reply Count"
+        description: "Number of <b>replies</b> this topic has received."
       last_replier:
-        title: ""
-        description: ""
+        title: "Last Replier"
+        description: "Shows who last replied and when."
       chat_notifications:
-        title: ""
-        description: ""
+        title: "Chat Messages"
+        description: "Your chat notifications appear here. Click to open the chat popup or full-screen chat window."
       user_center:
-        title: ""
-        description: ""
+        title: "User Menu"
+        description: "Click here to view notifications, messages, and bookmarks.<br><br><b style='color:#E45735;'>Click \"Next\" to open the menu and explore its features.</b>"
       menu_all_notifications:
-        title: ""
-        description: ""
+        title: "All Notifications"
+        description: "Your <b style='color:#e67e22;'>notification overview</b>.<br>Likes, mentions, and system notifications are all summarized here."
       menu_replies:
-        title: ""
-        description: ""
+        title: "Reply Notifications"
+        description: "Shows <b style='color:#00a65a;'>replies to your posts</b>.<br>Want to know who's talking to you? Check here."
       menu_messages:
-        title: ""
-        description: ""
+        title: "Private Messages"
+        description: "Your <b style='color:#0088cc;'>personal inbox</b>.<br>View private messages and bot notifications."
       menu_bookmarks:
-        title: ""
-        description: ""
+        title: "Bookmarks"
+        description: "All your bookmarked posts are here.<br>Found something interesting but don't have time to read? Click the <b>bookmark icon</b> below a post and read it later here."
       menu_chat_notifications:
-        title: ""
-        description: ""
+        title: "Chat Notifications"
+        description: "Real-time message alerts from <b style='color:#9b59b6;'>public channels</b> or <b style='color:#9b59b6;'>private chats</b>."
       menu_other_notifications:
-        title: ""
-        description: ""
+        title: "Other Notifications"
+        description: "<div>Badges earned, topic invitations, and other low-frequency notifications are grouped here.</div>"
       menu_profile:
-        title: ""
-        description: ""
+        title: "Profile"
+        description: "Go to your <b style='color:#2c3e50;'>profile page</b>.<br>Change your avatar, password, <b style='color:#2980b9;'>preferences</b>, or view your posting history."
       complete:
-        title: ""
-        description: ""
+        title: "Homepage Guide Complete!"
+        description: "Next, you'll be taken to a sample topic page for the topic-level guide."
     topic:
       welcome:
-        title: ""
-        description: ""
+        title: "Welcome to the Topic Page"
+        description: "This guide will help you understand the key features of the topic page."
       topic_title:
-        title: ""
-        description: ""
+        title: "Topic Title"
+        description: "Shows the current topic title and related info."
       timeline:
-        title: ""
-        description: ""
+        title: "Timeline Navigation"
+        description: "<p>This is Discourse's unique timeline.</p><p>Drag the slider to jump between posts, or <span style='font-size: large'>click the date at the top/bottom to jump to the first or latest post</span>.</p>"
       actions:
-        title: ""
-        description: ""
+        title: "Reply & Actions"
+        description: "Reply, share, or perform other topic actions here."
       back_to_top:
-        title: ""
-        description: ""
+        title: "Back to Top"
+        description: "Click the title above to jump back to the top of the page."
       certification:
-        title: ""
-        description: ""
-        next_btn: ""
+        title: "Alumni Verification Required"
+        description: "Verify your alumni status to access the full forum experience. Click the button below to go to the verification guide."
+        next_btn: "Go to Verification Guide"
+  theme_settings:
+    schema:
+      descriptions:
+        home_tour_target_topic_id: "Target topic ID to navigate to after completing the homepage guide"
+        certification_tutorial_topic_id: "Alumni certification tutorial topic ID. <=0 means not configured"
+        verified_groups: "Verified user groups. Leave empty to always show the certification prompt"
+        home_tour_steps:
+          label: "Homepage Tour Steps"
+          description: "Configure individual steps of the homepage tour"
+          properties:
+            title_key: "Title i18n key"
+            description_key: "Description i18n key"
+            element: "CSS selector. Empty for full-screen highlight"
+            device: "Device type: both=all, desktop=desktop only, mobile=mobile only"
+            on_highlighted: "Callback when the step is highlighted"
+            side: "Popover side position (empty=auto)"
+            align: "Popover alignment (empty=auto)"
+            buttons: "Buttons to show, separated by |"
+        topic_tour_steps:
+          label: "Topic Page Tour Steps"
+          description: "Configure individual steps of the topic page tour"
+          properties:
+            title_key: "Title i18n key"
+            description_key: "Description i18n key"
+            element: "CSS selector. Empty for full-screen highlight"
+            device: "Device type"
+            on_highlighted: "Callback when the step is highlighted"
+            side: "Popover side position (empty=auto)"
+            align: "Popover alignment (empty=auto)"
+            on_next: "Action on clicking Next"
+            buttons: "Buttons to show"
+        conditional_steps:
+          label: "Conditional Steps"
+          description: "Step groups inserted dynamically based on conditions"
+          properties:
+            condition: "Condition: user_not_in_group=user not in group, user_in_group=user in group, always=always"
+            group_name: "User group name"
+            steps: "Step list"

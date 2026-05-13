@@ -8,9 +8,9 @@ certification_tutorial_topic_id:
   type: integer
   default: 5
 
-# 已完成认证的用户组名称（精确匹配组名；留空则始终显示认证提示步骤）
-verified_group_name:
-  type: string
+# 已完成认证的用户组（多选；留空则始终显示认证提示步骤）
+verified_groups:
+  type: groups
   default: ""
 
 # 首页引导步骤配置
@@ -46,10 +46,29 @@ home_tour_steps:
           - auto_open_user_menu
           - auto_close_menu
         default: none
+      side:
+        type: enum
+        choices:
+          - ""
+          - top
+          - right
+          - bottom
+          - left
+        default: ""
+        description: "弹窗位置（留空=自动选择）"
+      align:
+        type: enum
+        choices:
+          - ""
+          - start
+          - center
+          - end
+        default: ""
+        description: "弹窗对齐方式（留空=自动选择）"
       buttons:
         type: list
-        description: "显示的按钮，如 next,previous,close"
-        default: "next,previous,close"
+        description: "显示的按钮，如 next|previous|close"
+        default: "next|previous|close"
 
 # 帖子页引导步骤配置
 topic_tour_steps:
@@ -83,6 +102,25 @@ topic_tour_steps:
           - auto_open_user_menu
           - auto_close_menu
         default: none
+      side:
+        type: enum
+        choices:
+          - ""
+          - top
+          - right
+          - bottom
+          - left
+        default: ""
+        description: "弹窗位置（留空=自动选择）"
+      align:
+        type: enum
+        choices:
+          - ""
+          - start
+          - center
+          - end
+        default: ""
+        description: "弹窗对齐方式（留空=自动选择）"
       on_next:
         type: enum
         choices:
@@ -92,7 +130,7 @@ topic_tour_steps:
       buttons:
         type: list
         description: "显示的按钮"
-        default: "next,previous,close"
+        default: "next|previous|close"
 
 # 条件步骤配置（根据条件动态插入步骤组）
 conditional_steps:
@@ -139,6 +177,23 @@ conditional_steps:
                 - auto_open_user_menu
                 - auto_close_menu
               default: none
+            side:
+              type: enum
+              choices:
+                - ""
+                - top
+                - right
+                - bottom
+                - left
+              default: ""
+            align:
+              type: enum
+              choices:
+                - ""
+                - start
+                - center
+                - end
+              default: ""
             on_next:
               type: enum
               choices:
@@ -147,4 +202,4 @@ conditional_steps:
               default: none
             buttons:
               type: list
-              default: "next,previous,close"
+              default: "next|previous|close"
