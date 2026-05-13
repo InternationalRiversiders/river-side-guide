@@ -8,9 +8,9 @@ certification_tutorial_topic_id:
   type: integer
   default: 5
 
-# 已完成认证的用户组（多选；留空则始终显示认证提示步骤）
+# 已完成认证的用户组名称（多个用逗号分隔；留空则始终显示认证提示步骤）
 verified_groups:
-  type: groups
+  type: string
   default: ""
 
 # 首页引导步骤配置

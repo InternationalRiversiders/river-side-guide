@@ -113,7 +113,7 @@ zh_CN:
       descriptions:
         home_tour_target_topic_id: "首页引导完成后跳转的目标帖子 ID"
         certification_tutorial_topic_id: "校友认证教程帖子 ID，<=0 表示未配置"
-        verified_groups: "已认证用户组，留空则始终显示认证提示"
+        verified_groups: "已认证用户组名称（多个用逗号分隔），留空则始终显示认证提示"
         home_tour_steps:
           label: "首页引导步骤"
           description: "配置首页引导的各个步骤"

@@ -113,7 +113,7 @@ en:
       descriptions:
         home_tour_target_topic_id: "Target topic ID to navigate to after completing the homepage guide"
         certification_tutorial_topic_id: "Alumni certification tutorial topic ID. <=0 means not configured"
-        verified_groups: "Verified user groups. Leave empty to always show the certification prompt"
+        verified_groups: "Verified user group names (comma-separated). Leave empty to always show the certification prompt"
         home_tour_steps:
           label: "Homepage Tour Steps"
           description: "Configure individual steps of the homepage tour"

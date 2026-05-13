@@ -24,7 +24,7 @@ Riverside Guide 是一个 Discourse Theme Component（主题组件），使用 D
 |------|------|------|
 | `home_tour_target_topic_id` | integer | 首页引导完成后跳转的目标帖子 ID |
 | `certification_tutorial_topic_id` | integer | 校友认证教程帖子 ID（<=0 视为未配置） |
-| `verified_groups` | groups | 已完成认证的用户组（多选；留空则始终显示认证提示步骤） |
+| `verified_groups` | string | 已完成认证的用户组名称（多个逗号分隔；留空则始终显示认证提示） |
 
 ## Core Concepts
 

@@ -38,10 +38,15 @@ export default apiInitializer((api) => {
     themeSettings.certification_tutorial_topic_id,
     5
   );
-  // 已认证用户组列表（type: groups 返回组名字符串数组）；空数组则始终显示提示
-  const VERIFIED_GROUPS = Array.isArray(themeSettings.verified_groups)
-    ? themeSettings.verified_groups
-    : [];
+  // 已认证用户组列表（type: string，逗号分隔多个组名）；空字符串则始终显示提示
+  const VERIFIED_GROUPS = (() => {
+    const raw = themeSettings.verified_groups;
+    if (Array.isArray(raw)) return raw.filter(Boolean);
+    if (typeof raw === "string" && raw.trim()) {
+      return raw.split(",").map((g) => g.trim()).filter(Boolean);
+    }
+    return [];
+  })();
 
   // 获取当前用户所属的用户组名称列表（字符串数组）
   function getCurrentUserGroupNames() {
